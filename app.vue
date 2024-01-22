@@ -55,11 +55,7 @@ onMounted(() => {
 </script>
 
 <style lang="scss">
-// html {
-//   font-size: 14px;
-// }
 body {
-  // font-size: 1.14rem;
   a,
   a:link,
   a:visited,
@@ -71,6 +67,17 @@ body {
   ul,
   li {
     list-style: none;
+  }
+  .omit-1 {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    -o-text-overflow: ellipsis;
+    overflow: hidden;
+  }
+  @media only screen and (max-width: 992px) {
+    * {
+      font-size: 14px;
+    }
   }
 }
 </style>

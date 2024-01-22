@@ -17,27 +17,29 @@
         </span>
       </div>
     </div>
-    <div class="navigate-wrap">
-      <div class="logo-wrap">
-        <img src="~/assets/logo_black.svg" alt="logo" class="logo-img" />
+    <el-affix :offset="0">
+      <div class="navigate-wrap">
+        <div class="logo-wrap">
+          <img src="~/assets/logo_black.svg" alt="logo" class="logo-img" />
+        </div>
+        <div class="navigation hidden-md-and-down">
+          <ul>
+            <li
+              v-for="item in state.navigationList"
+              :key="item.label"
+              :class="{ 'li-active': item.route === route.path }">
+              <el-popover v-if="item.hasChild" placement="bottom" trigger="hover">
+                <template #reference>
+                  <NuxtLink :to="item.route">{{ item.label }}</NuxtLink>
+                </template>
+                <div class="child">子类别</div>
+              </el-popover>
+              <NuxtLink v-else :to="item.route">{{ item.label }}</NuxtLink>
+            </li>
+          </ul>
+        </div>
       </div>
-      <div class="navigation hidden-md-and-down">
-        <ul>
-          <li
-            v-for="item in state.navigationList"
-            :key="item.label"
-            :class="{ 'li-active': item.route === route.path }">
-            <el-popover v-if="item.hasChild" placement="bottom" trigger="hover">
-              <template #reference>
-                <NuxtLink :to="item.route">{{ item.label }}</NuxtLink>
-              </template>
-              <div class="child">子类别</div>
-            </el-popover>
-            <NuxtLink v-else :to="item.route">{{ item.label }}</NuxtLink>
-          </li>
-        </ul>
-      </div>
-    </div>
+    </el-affix>
   </header>
 </template>
 <script lang="ts" setup>
@@ -79,6 +81,7 @@ header {
     }
   }
   .navigate-wrap {
+    background-color: rgba(255, 255, 255, 0.8);
     padding: 0.05rem 0.1rem;
     display: flex;
     justify-content: space-between;
