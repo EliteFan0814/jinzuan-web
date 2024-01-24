@@ -40,7 +40,7 @@
           <el-breadcrumb separator="/">
             <el-breadcrumb-item :to="{ path: '/' }">Home</el-breadcrumb-item>
             <el-breadcrumb-item><NuxtLink to="/products">Products List</NuxtLink></el-breadcrumb-item>
-            <el-breadcrumb-item>promotion list</el-breadcrumb-item>
+            <el-breadcrumb-item>{{ route.params.productId }}</el-breadcrumb-item>
           </el-breadcrumb>
         </div>
         <div class="product-list">
@@ -50,9 +50,7 @@
                 <div class="img-wrap">
                   <img :src="item.img" :alt="item.label" class="p-img" />
                 </div>
-                <div class="p-name omit-1">
-                  <NuxtLink :to="`/webProducts/${item.id}`">{{ item.label }}</NuxtLink>
-                </div>
+                <div class="p-name omit-1">{{ item.label }}</div>
                 <div class="item"></div>
               </div>
             </el-col>
@@ -68,33 +66,29 @@
   </div>
 </template>
 <script lang="ts" setup>
+const route = useRoute();
 const state = reactive({
   activeNames: "1",
   productsList: [
     {
       label: "PCD-切削用金刚石复合片",
       img: "https://dummyimage.com/800x600/ccc/fff",
-      id: 1,
     },
     {
       label: "PCD-切削用金刚石复合片",
       img: "https://dummyimage.com/1200x600/ccc/fff",
-      id: 2,
     },
     {
       label: "PCD-切削用金刚石复合片",
       img: "https://dummyimage.com/900x1600/ccc/fff",
-      id: 3,
     },
     {
       label: "PCD-切削用金刚石复合片",
       img: "https://dummyimage.com/800x480/ccc/fff",
-      id: 4,
     },
     {
       label: "PCD-切削用金刚石复合片",
       img: "https://dummyimage.com/800x600/ccc/fff",
-      id: 5,
     },
   ],
 });

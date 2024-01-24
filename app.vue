@@ -1,6 +1,7 @@
 <template>
   <AppHeader />
   <NuxtPage />
+  <AppFooter />
 </template>
 <script setup>
 function flexible() {
@@ -73,6 +74,12 @@ body {
     text-overflow: ellipsis;
     -o-text-overflow: ellipsis;
     overflow: hidden;
+  }
+  .omit-2 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
   }
   @media only screen and (max-width: 992px) {
     * {

@@ -51,11 +51,21 @@
       </h2>
       <h3 class="sub-title">公司新闻、最新行业动态实时更新</h3>
       <div class="news-wrap">
-        <div class="news-item">
+        <div class="news-item" v-for="(item, index) in state.newsList" :key="index">
           <el-row>
-            <el-col :md="4"><div>新闻报道<time>2023-10-30</time></div></el-col>
-            <el-col :md="20"><div>新闻报道新闻报道新闻报道新闻报道</div></el-col>
+            <el-col :md="6">
+              <div>
+                <span class="news-class">{{ item.type }}</span>
+                <time>{{ item.time }}</time>
+              </div>
+            </el-col>
+            <el-col :md="18">
+              <div class="news-title omit-1">{{ item.title }}</div>
+            </el-col>
           </el-row>
+        </div>
+        <div class="more">
+          <button class="common-btn">More</button>
         </div>
       </div>
     </section>
@@ -74,6 +84,19 @@ const state = reactive({
     { label: "电子、半导体、金刚石", img: "https://dummyimage.com/600x400/ccc/fff" },
     { label: "电子、半导体、金刚石", img: "https://dummyimage.com/600x400/ccc/fff" },
     { label: "电子、半导体、金刚石", img: "https://dummyimage.com/600x400/ccc/fff" },
+  ],
+  newsList: [
+    {
+      title:
+        "新闻报道新闻报道新闻报道新闻报道新闻报道新闻报道新闻新闻报道新闻报道新闻报道新闻报道新闻报道新闻报道新闻报道新闻报道报道新闻报道",
+      time: "2023-10-30",
+      id: 1,
+      type: "新闻报道",
+    },
+    { title: "新闻报道新闻报道新闻报道新闻报道", time: "2023-10-30", id: 1, type: "新闻报道" },
+    { title: "新闻报道新闻报道新闻报道新闻报道", time: "2023-10-30", id: 1, type: "新闻报道" },
+    { title: "新闻报道新闻报道新闻报道新闻报道", time: "2023-10-30", id: 1, type: "新闻报道" },
+    { title: "新闻报道新闻报道新闻报道新闻报道", time: "2023-10-30", id: 1, type: "新闻报道" },
   ],
 });
 </script>
@@ -174,7 +197,51 @@ const state = reactive({
     padding: 0.1rem;
     .news-wrap {
       margin: 0 2rem;
-      border: 1px solid red;
+      .news-item {
+        font-size: 16px;
+        padding: 0.1rem 0;
+        border-top: 1px solid #ccc;
+        &:last-child {
+          border-bottom: 1px solid #ccc;
+        }
+        .news-class {
+          display: inline-block;
+          padding: 0.04rem 0.08rem;
+          background-color: #f5a63f;
+          color: #fff;
+          cursor: pointer;
+          &:hover {
+            background-color: #ccc;
+          }
+        }
+        time {
+          display: inline-block;
+          padding: 0.04rem 0.1rem;
+        }
+        .news-title {
+          padding: 0.04rem 0.1rem;
+          cursor: pointer;
+          &:hover {
+            text-decoration: underline;
+            color: #f5a63f;
+          }
+        }
+      }
+      .more {
+        text-align: center;
+        .common-btn {
+          color: #151515;
+          background-color: #ccc;
+          border: none;
+          padding: 0.05rem 0.1rem;
+          cursor: pointer;
+          transition: all 0.2s;
+          &:hover {
+            background-color: #f5a63f;
+            color: #fff;
+          }
+        }
+      }
     }
   }
 }

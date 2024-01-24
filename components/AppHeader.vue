@@ -49,11 +49,11 @@ const state = reactive({
   navigationList: [
     { label: "home", hasChild: false, route: "/" },
     { label: "about", hasChild: false, route: "/about" },
-    { label: "solutions", hasChild: true, route: "/solutions" },
+    // { label: "solutions", hasChild: true, route: "/solutions" },
     { label: "products", hasChild: true, route: "/products" },
     { label: "news", hasChild: false, route: "/news" },
-    { label: "downloads", hasChild: false, route: "/downloads" },
-    { label: "contacts", hasChild: false, route: "/contacts" },
+    // { label: "downloads", hasChild: false, route: "/downloads" },
+    // { label: "contacts", hasChild: false, route: "/contacts" },
   ],
 });
 const route = useRoute();
