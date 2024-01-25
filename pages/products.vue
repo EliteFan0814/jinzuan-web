@@ -8,7 +8,7 @@
         <el-menu default-active="2" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose">
           <el-sub-menu index="1">
             <template #title>
-              <span>产品类别1</span>
+              <span @click="testFetch">产品类别1</span>
             </template>
             <el-menu-item index="1-1">产品1</el-menu-item>
             <el-menu-item index="1-1">产品1</el-menu-item>
@@ -98,6 +98,11 @@ const state = reactive({
     },
   ],
 });
+const testFetch = async () => {
+  const res = await $fetch("/api/captchaImage", {
+    method: "GET",
+  });
+};
 </script>
 <style lang="scss" scoped>
 .products-wrap {

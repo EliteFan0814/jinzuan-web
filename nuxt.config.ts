@@ -6,4 +6,13 @@ export default defineNuxtConfig({
     /** Options */
   },
   css: ["normalize.css", "element-plus/theme-chalk/display.css"],
+  nitro: {
+    devProxy: {
+      "/api": {
+        target: "http://localhost:8080/admin", // 这里是接口地址
+        changeOrigin: true,
+        prependPath: true,
+      },
+    },
+  },
 });
