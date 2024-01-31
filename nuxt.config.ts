@@ -8,10 +8,24 @@ export default defineNuxtConfig({
   css: ["normalize.css", "element-plus/theme-chalk/display.css"],
   nitro: {
     devProxy: {
-      "/api": {
+      "/web-api": {
         target: "http://localhost:8080/admin", // 这里是接口地址
         changeOrigin: true,
         prependPath: true,
+      },
+    },
+  },
+  $development: {
+    runtimeConfig: {
+      public: {
+        apiBaseUrl: "",
+      },
+    },
+  },
+  $production: {
+    runtimeConfig: {
+      public: {
+        apiBaseUrl: "",
       },
     },
   },

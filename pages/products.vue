@@ -3,35 +3,19 @@
     <div class="head">
       <img src="https://dummyimage.com/1200x200/ccc/fff" alt="" />
     </div>
-    <div class="products-content">
+    <div class="products-content" v-loading="state.loading">
       <div class="left">
-        <el-menu default-active="2" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose">
-          <el-sub-menu index="1">
+        <el-menu :default-openeds="['0']" @open="handleOpen" @close="handleClose">
+          <el-sub-menu v-for="(item, index) in state.productsClassList" :key="item.id" :index="String(index)">
             <template #title>
-              <span @click="testFetch">产品类别1</span>
+              <span>{{ item.label }}</span>
             </template>
-            <el-menu-item index="1-1">产品1</el-menu-item>
-            <el-menu-item index="1-1">产品1</el-menu-item>
-            <el-menu-item index="1-1">产品1</el-menu-item>
-            <el-menu-item index="1-1">产品1</el-menu-item>
-          </el-sub-menu>
-          <el-sub-menu index="2">
-            <template #title>
-              <span>产品类别2</span>
-            </template>
-            <el-menu-item index="1-1">产品1</el-menu-item>
-            <el-menu-item index="1-1">产品1</el-menu-item>
-            <el-menu-item index="1-1">产品1</el-menu-item>
-            <el-menu-item index="1-1">产品1</el-menu-item>
-          </el-sub-menu>
-          <el-sub-menu index="3">
-            <template #title>
-              <span>产品类别3</span>
-            </template>
-            <el-menu-item index="1-1">产品1</el-menu-item>
-            <el-menu-item index="1-1">产品1</el-menu-item>
-            <el-menu-item index="1-1">产品1</el-menu-item>
-            <el-menu-item index="1-1">产品1</el-menu-item>
+            <el-menu-item
+              v-for="(innerItem, innerIndex) in item.children"
+              :key="innerItem.id"
+              :index="String(index) + '-' + String(innerIndex)">
+              {{ innerItem.label }}
+            </el-menu-item>
           </el-sub-menu>
         </el-menu>
       </div>
@@ -69,7 +53,9 @@
 </template>
 <script lang="ts" setup>
 const state = reactive({
-  activeNames: "1",
+  loading: false,
+  activeNames: "0",
+  productsClassList: [] as any,
   productsList: [
     {
       label: "PCD-切削用金刚石复合片",
@@ -98,11 +84,30 @@ const state = reactive({
     },
   ],
 });
-const testFetch = async () => {
-  const res = await $fetch("/api/captchaImage", {
-    method: "GET",
-  });
+const config = useRuntimeConfig();
+const baseUrl = config.public.apiBaseUrl;
+onMounted(async () => {
+  await handleGetProductsClassList();
+});
+// 获取产品分类
+const handleGetProductsClassList = async () => {
+  try {
+    state.loading = true;
+    // const res = await useFetch(`${baseUrl}/web-api/webOffice/product/productsClassTree`);
+    const res = await $fetch(`${baseUrl}/web-api/webOffice/product/productsClassTree`);
+    if (res.code === 200) {
+      console.log(res);
+      state.productsClassList = res.data;
+    }
+  } catch (err) {
+  } finally {
+    state.loading = false;
+  }
 };
+// handleGetProductsClassList();
+
+const handleOpen = () => {};
+const handleClose = () => {};
 </script>
 <style lang="scss" scoped>
 .products-wrap {
