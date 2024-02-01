@@ -5,7 +5,13 @@ export default defineNuxtConfig({
   elementPlus: {
     /** Options */
   },
-  css: ["normalize.css", "element-plus/theme-chalk/display.css"],
+  css: [
+    "normalize.css",
+    "element-plus/theme-chalk/display.css",
+    // "/css/quill.core.css",
+    // "/css/quill.snow.css",
+    // "/css/quill.bubble.css",
+  ],
   nitro: {
     devProxy: {
       "/web-api": {

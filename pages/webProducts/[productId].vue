@@ -1,64 +1,55 @@
 <template>
   <div class="products-wrap">
+    <link rel="stylesheet" href="/css/quill.core.css" />
+    <link rel="stylesheet" href="/css/quill.snow.css" />
+    <link rel="stylesheet" href="/css/quill.bubble.css" />
     <div class="head">
       <img src="https://dummyimage.com/1200x200/ccc/fff" alt="" />
     </div>
-    <div class="products-content">
+    <div class="products-content" v-loading="state.loading">
       <div class="left">
-        <el-menu default-active="2" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose">
-          <el-sub-menu index="1">
-            <template #title>
-              <span>产品类别1</span>
-            </template>
-            <el-menu-item index="1-1">产品1</el-menu-item>
-            <el-menu-item index="1-1">产品1</el-menu-item>
-            <el-menu-item index="1-1">产品1</el-menu-item>
-            <el-menu-item index="1-1">产品1</el-menu-item>
-          </el-sub-menu>
-          <el-sub-menu index="2">
-            <template #title>
-              <span>产品类别2</span>
-            </template>
-            <el-menu-item index="1-1">产品1</el-menu-item>
-            <el-menu-item index="1-1">产品1</el-menu-item>
-            <el-menu-item index="1-1">产品1</el-menu-item>
-            <el-menu-item index="1-1">产品1</el-menu-item>
-          </el-sub-menu>
-          <el-sub-menu index="3">
-            <template #title>
-              <span>产品类别3</span>
-            </template>
-            <el-menu-item index="1-1">产品1</el-menu-item>
-            <el-menu-item index="1-1">产品1</el-menu-item>
-            <el-menu-item index="1-1">产品1</el-menu-item>
-            <el-menu-item index="1-1">产品1</el-menu-item>
-          </el-sub-menu>
-        </el-menu>
+        <div class="link-wrap">
+          <h2>Get Social</h2>
+          <div class="icon-wrap">
+            <a href="//www.youtube.com/@jinzuan">
+              <svg class="icon" aria-hidden="true">
+                <use xlink:href="#icon-youtube"></use>
+              </svg>
+            </a>
+            <a href="//www.pinterest.com/jzcut/">
+              <svg class="icon" aria-hidden="true">
+                <use xlink:href="#icon-pinterestpinterest30"></use>
+              </svg>
+            </a>
+            <a href="//www.facebook.com/jzcut">
+              <svg class="icon" aria-hidden="true">
+                <use xlink:href="#icon-facebook"></use>
+              </svg>
+            </a>
+            <a href="//instagram.com/jz_cut">
+              <svg class="icon" aria-hidden="true">
+                <use xlink:href="#icon-instagram"></use>
+              </svg>
+            </a>
+          </div>
+        </div>
       </div>
       <div class="right">
         <div class="bread-wrap">
           <el-breadcrumb separator="/">
             <el-breadcrumb-item :to="{ path: '/' }">Home</el-breadcrumb-item>
             <el-breadcrumb-item><NuxtLink to="/products">Products List</NuxtLink></el-breadcrumb-item>
-            <el-breadcrumb-item>{{ route.params.productId }}</el-breadcrumb-item>
+            <el-breadcrumb-item>{{ state.productClassNameEn }}</el-breadcrumb-item>
+            <el-breadcrumb-item>{{ state.productNameEn }}</el-breadcrumb-item>
           </el-breadcrumb>
         </div>
         <div class="product-list">
           <el-row>
-            <el-col :md="6" :sm="8" v-for="(item, index) in state.productsList" :key="index">
-              <div class="p-item">
-                <div class="img-wrap">
-                  <img :src="item.img" :alt="item.label" class="p-img" />
-                </div>
-                <div class="p-name omit-1">{{ item.label }}</div>
-                <div class="item"></div>
+            <el-col>
+              <div class="ql-container ql-snow">
+                <div class="ql-editor" v-html="state.content"></div>
               </div>
             </el-col>
-          </el-row>
-          <el-row>
-            <div class="pagination">
-              <el-pagination background layout="prev, pager, next" :total="1000" />
-            </div>
           </el-row>
         </div>
       </div>
@@ -66,34 +57,54 @@
   </div>
 </template>
 <script lang="ts" setup>
-const route = useRoute();
-const state = reactive({
-  activeNames: "1",
-  productsList: [
+useHead({
+  script: [
     {
-      label: "PCD-切削用金刚石复合片",
-      img: "https://dummyimage.com/800x600/ccc/fff",
-    },
-    {
-      label: "PCD-切削用金刚石复合片",
-      img: "https://dummyimage.com/1200x600/ccc/fff",
-    },
-    {
-      label: "PCD-切削用金刚石复合片",
-      img: "https://dummyimage.com/900x1600/ccc/fff",
-    },
-    {
-      label: "PCD-切削用金刚石复合片",
-      img: "https://dummyimage.com/800x480/ccc/fff",
-    },
-    {
-      label: "PCD-切削用金刚石复合片",
-      img: "https://dummyimage.com/800x600/ccc/fff",
+      src: "/js/iconfont.js",
     },
   ],
 });
+const route = useRoute();
+const state = reactive({
+  loading: false,
+  productId: route.params.productId,
+  productClassName: "",
+  productClassNameEn: "",
+  productName: "",
+  productNameEn: "",
+  content: "",
+});
+const config = useRuntimeConfig();
+const baseUrl = config.public.apiBaseUrl;
+onMounted(async () => {
+  await handleGetProductsDetail();
+});
+// 获取产品详情
+const handleGetProductsDetail = async () => {
+  try {
+    state.loading = true;
+    const res: any = await $fetch(`${baseUrl}/web-api/webOffice/product/${state.productId}`);
+    if (res.code === 200) {
+      state.content = res.data.content;
+      state.productClassName = res.data.productClass.productClassName;
+      state.productClassNameEn = res.data.productClass.productClassNameEn;
+      state.productName = res.data.productName;
+      state.productNameEn = res.data.productNameEn;
+    }
+  } catch (err) {
+  } finally {
+    state.loading = false;
+  }
+};
 </script>
 <style lang="scss" scoped>
+.icon {
+  width: 1em;
+  height: 1em;
+  vertical-align: -0.15em;
+  fill: currentColor;
+  overflow: hidden;
+}
 .products-wrap {
   .head {
     img {
@@ -107,12 +118,25 @@ const state = reactive({
     .left {
       flex-shrink: 0;
       width: 20%;
-      .el-collapse {
+      .link-wrap {
+        .icon-wrap {
+          .icon {
+            font-size: 20px;
+            margin: 0 0.05rem;
+            color: #9b9b9b;
+            cursor: pointer;
+            transition: all 0.3s;
+            &:hover {
+              color: #ffbf6c;
+            }
+          }
+        }
       }
     }
     .right {
       flex-grow: 1;
       padding: 0.1rem;
+      border-left: 1px solid #dcdfe6;
       .bread-wrap {
         margin-bottom: 0.1rem;
       }

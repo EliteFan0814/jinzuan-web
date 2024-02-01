@@ -5,16 +5,17 @@
     </div>
     <div class="products-content" v-loading="state.loading">
       <div class="left">
-        <el-menu :default-openeds="['0']" @open="handleOpen" @close="handleClose">
+        <el-menu :default-openeds="['0']" ref="elMenuRef">
           <el-sub-menu v-for="(item, index) in state.productsClassList" :key="item.id" :index="String(index)">
             <template #title>
-              <span>{{ item.label }}</span>
+              <span @click.stop="handleSearchAll">{{ item.labelEn }}</span>
             </template>
             <el-menu-item
               v-for="(innerItem, innerIndex) in item.children"
               :key="innerItem.id"
-              :index="String(index) + '-' + String(innerIndex)">
-              {{ innerItem.label }}
+              :index="String(index) + '-' + String(innerIndex)"
+              @click="handleClassSearch(innerItem)">
+              {{ innerItem.labelEn }}
             </el-menu-item>
           </el-sub-menu>
         </el-menu>
@@ -24,7 +25,7 @@
           <el-breadcrumb separator="/">
             <el-breadcrumb-item :to="{ path: '/' }">Home</el-breadcrumb-item>
             <el-breadcrumb-item><NuxtLink to="/products">Products List</NuxtLink></el-breadcrumb-item>
-            <el-breadcrumb-item>promotion list</el-breadcrumb-item>
+            <el-breadcrumb-item>{{ state.activeClass }}</el-breadcrumb-item>
           </el-breadcrumb>
         </div>
         <div class="product-list">
@@ -32,10 +33,10 @@
             <el-col :md="6" :sm="8" v-for="(item, index) in state.productsList" :key="index">
               <div class="p-item">
                 <div class="img-wrap">
-                  <img :src="item.img" :alt="item.label" class="p-img" />
+                  <img :src="item.avatar" :alt="item.productNameEn" class="p-img" />
                 </div>
                 <div class="p-name omit-1">
-                  <NuxtLink :to="`/webProducts/${item.id}`">{{ item.label }}</NuxtLink>
+                  <NuxtLink :to="`/webProducts/${item.productId}`">{{ item.productNameEn }}</NuxtLink>
                 </div>
                 <div class="item"></div>
               </div>
@@ -43,7 +44,15 @@
           </el-row>
           <el-row>
             <div class="pagination">
-              <el-pagination background layout="prev, pager, next" :total="1000" />
+              <el-pagination
+                v-model:currentPage="state.queryParams.pageNum"
+                v-model:page-size="state.queryParams.pageSize"
+                :total="state.total"
+                :page-sizes="[10, 20, 50, 100]"
+                background
+                @size-change="handleSizeChange"
+                @current-change="handleCurrentChange"
+                layout="total, sizes, prev, pager, next, jumper" />
             </div>
           </el-row>
         </div>
@@ -54,39 +63,21 @@
 <script lang="ts" setup>
 const state = reactive({
   loading: false,
-  activeNames: "0",
+  activeClass: "",
   productsClassList: [] as any,
-  productsList: [
-    {
-      label: "PCD-切削用金刚石复合片",
-      img: "https://dummyimage.com/800x600/ccc/fff",
-      id: 1,
-    },
-    {
-      label: "PCD-切削用金刚石复合片",
-      img: "https://dummyimage.com/1200x600/ccc/fff",
-      id: 2,
-    },
-    {
-      label: "PCD-切削用金刚石复合片",
-      img: "https://dummyimage.com/900x1600/ccc/fff",
-      id: 3,
-    },
-    {
-      label: "PCD-切削用金刚石复合片",
-      img: "https://dummyimage.com/800x480/ccc/fff",
-      id: 4,
-    },
-    {
-      label: "PCD-切削用金刚石复合片",
-      img: "https://dummyimage.com/800x600/ccc/fff",
-      id: 5,
-    },
-  ],
+  productsList: [] as any,
+  total: 0,
+  queryParams: {
+    pageNum: 1,
+    pageSize: 10,
+    classId: "",
+  },
 });
+const elMenuRef = ref();
 const config = useRuntimeConfig();
 const baseUrl = config.public.apiBaseUrl;
 onMounted(async () => {
+  await handleGetProductsList();
   await handleGetProductsClassList();
 });
 // 获取产品分类
@@ -96,7 +87,6 @@ const handleGetProductsClassList = async () => {
     // const res = await useFetch(`${baseUrl}/web-api/webOffice/product/productsClassTree`);
     const res = await $fetch(`${baseUrl}/web-api/webOffice/product/productsClassTree`);
     if (res.code === 200) {
-      console.log(res);
       state.productsClassList = res.data;
     }
   } catch (err) {
@@ -104,10 +94,43 @@ const handleGetProductsClassList = async () => {
     state.loading = false;
   }
 };
-// handleGetProductsClassList();
+// 获取产品列表
+const handleGetProductsList = async () => {
+  try {
+    state.loading = true;
+    const queryStr = new URLSearchParams(state.queryParams).toString();
+    console.log(queryStr);
+    // const res = await useFetch(`${baseUrl}/web-api/webOffice/product/list`);
+    const res = await $fetch(`${baseUrl}/web-api/webOffice/product/list?${queryStr}`);
+    if (res.code === 200) {
+      state.productsList = res.rows;
+      state.total = res.total;
+    }
+  } catch (err) {
+  } finally {
+    state.loading = false;
+  }
+};
 
-const handleOpen = () => {};
-const handleClose = () => {};
+const handleSearchAll = () => {
+  // state.queryParams.classId = "";
+  // handleGetProductsList();
+};
+// 点击类别查询产品
+const handleClassSearch = ({ id, labelEn }) => {
+  state.queryParams.classId = id;
+  state.activeClass = labelEn;
+  handleGetProductsList();
+};
+const handleCurrentChange = (val: number) => {
+  handleGetProductsList();
+};
+// 改变页面容量
+const handleSizeChange = (val: number) => {
+  state.queryParams.pageNum = 1;
+  state.queryParams.pageSize = val;
+  handleGetProductsList();
+};
 </script>
 <style lang="scss" scoped>
 .products-wrap {
