@@ -7,33 +7,70 @@
       <img src="https://dummyimage.com/1200x200/ccc/fff" alt="" />
     </div>
     <div class="products-content" v-loading="state.loading">
-      <div class="left">
-        <div class="link-wrap">
-          <h2>Get Social</h2>
-          <div class="icon-wrap">
-            <a href="//www.youtube.com/@jinzuan">
-              <svg class="icon" aria-hidden="true">
-                <use xlink:href="#icon-youtube"></use>
-              </svg>
-            </a>
-            <a href="//www.pinterest.com/jzcut/">
-              <svg class="icon" aria-hidden="true">
-                <use xlink:href="#icon-pinterestpinterest30"></use>
-              </svg>
-            </a>
-            <a href="//www.facebook.com/jzcut">
-              <svg class="icon" aria-hidden="true">
-                <use xlink:href="#icon-facebook"></use>
-              </svg>
-            </a>
-            <a href="//instagram.com/jz_cut">
-              <svg class="icon" aria-hidden="true">
-                <use xlink:href="#icon-instagram"></use>
-              </svg>
-            </a>
+      <el-affix :offset="100" class="left hidden-md-and-down" style="z-index:2;">
+        <div>
+          <div class="link-wrap">
+            <h2>Get Social</h2>
+            <div class="icon-wrap">
+              <a href="//www.youtube.com/@jinzuan">
+                <svg class="icon" aria-hidden="true">
+                  <use xlink:href="#icon-youtube"></use>
+                </svg>
+              </a>
+              <a href="//www.pinterest.com/jzcut/">
+                <svg class="icon" aria-hidden="true">
+                  <use xlink:href="#icon-pinterestpinterest30"></use>
+                </svg>
+              </a>
+              <a href="//www.facebook.com/jzcut">
+                <svg class="icon" aria-hidden="true">
+                  <use xlink:href="#icon-facebook"></use>
+                </svg>
+              </a>
+              <a href="//instagram.com/jz_cut">
+                <svg class="icon" aria-hidden="true">
+                  <use xlink:href="#icon-instagram"></use>
+                </svg>
+              </a>
+            </div>
+          </div>
+          <div class="link-wrap">
+            <h2>Phone / WhatsApp</h2>
+            <div class="icon-wrap phone">
+              <a
+                href="//wa.me/8618117002521?text=Hello, I+am+Alexis+Ye+from+Zhengzhou+Jinzuan+Diamond+Tools+Co.,+Ltd.+Welcome+to+your+inquiry.">
+                <svg class="icon" aria-hidden="true">
+                  <use xlink:href="#icon-whatsapp"></use>
+                </svg>
+              </a>
+              <a
+                href="//wa.me/8618117002521?text=Hello, I+am+Alexis+Ye+from+Zhengzhou+Jinzuan+Diamond+Tools+Co.,+Ltd.+Welcome+to+your+inquiry.">
+                +86 18117002521
+              </a>
+            </div>
+            <div class="icon-wrap phone">
+              <a href="tel:8618117002521">
+                <svg class="icon" aria-hidden="true">
+                  <use xlink:href="#icon-tel"></use>
+                </svg>
+              </a>
+              <a href="tel:8618117002521">+86 18117002521</a>
+            </div>
+          </div>
+          <div class="link-wrap">
+            <h2>Email</h2>
+            <div class="icon-wrap phone">
+              <a href="mailto:cartroyal@gmail.com">
+                <svg class="icon" aria-hidden="true">
+                  <use xlink:href="#icon-email"></use>
+                </svg>
+              </a>
+              <a href="mailto:cartroyal@gmail.com">cartroyal@gmail.com</a>
+            </div>
           </div>
         </div>
-      </div>
+      </el-affix>
+      <!-- <div class="left-div"></div> -->
       <div class="right">
         <div class="bread-wrap">
           <el-breadcrumb separator="/">
@@ -43,7 +80,7 @@
             <el-breadcrumb-item>{{ state.productNameEn }}</el-breadcrumb-item>
           </el-breadcrumb>
         </div>
-        <div class="product-list">
+        <div class="product-content">
           <el-row>
             <el-col>
               <div class="ql-container ql-snow">
@@ -57,13 +94,7 @@
   </div>
 </template>
 <script lang="ts" setup>
-useHead({
-  script: [
-    {
-      src: "/js/iconfont.js",
-    },
-  ],
-});
+
 const route = useRoute();
 const state = reactive({
   loading: false,
@@ -98,13 +129,7 @@ const handleGetProductsDetail = async () => {
 };
 </script>
 <style lang="scss" scoped>
-.icon {
-  width: 1em;
-  height: 1em;
-  vertical-align: -0.15em;
-  fill: currentColor;
-  overflow: hidden;
-}
+
 .products-wrap {
   .head {
     img {
@@ -117,8 +142,15 @@ const handleGetProductsDetail = async () => {
     display: flex;
     .left {
       flex-shrink: 0;
-      width: 20%;
+      width: 200px;
       .link-wrap {
+        margin-right: 0.1rem;
+        padding-bottom: 0.1rem;
+        border-bottom: 1px solid #ebebeb;
+        h2 {
+          font-size: 16px;
+          color: #666;
+        }
         .icon-wrap {
           .icon {
             font-size: 20px;
@@ -131,61 +163,51 @@ const handleGetProductsDetail = async () => {
             }
           }
         }
+        .phone {
+          display: flex;
+          align-items: center;
+          margin-bottom: 0.05rem;
+          &:last-child {
+            margin-bottom: 0;
+          }
+          a {
+            &:hover {
+              text-decoration: underline;
+              color: #ffbf6c;
+            }
+          }
+          .icon {
+            color: #ffc107;
+          }
+        }
       }
     }
     .right {
+      box-sizing: border-box;
+      width: calc(100% - 200px);
       flex-grow: 1;
       padding: 0.1rem;
-      border-left: 1px solid #dcdfe6;
       .bread-wrap {
         margin-bottom: 0.1rem;
       }
-      .product-list {
-        .p-item {
-          padding: 0.1rem 0;
-          border: 1px solid transparent;
-          transition: all 0.2s;
-          &:hover {
-            border: 1px solid #ffbf6c;
-          }
-          .img-wrap {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 80%;
-            margin: 0 auto;
-            height: 200px;
-            margin-bottom: 0.05rem;
-            // border: 1px solid red;
-            .p-img {
-              display: block;
+      .product-content {
+        .ql-container {
+          border: 1px solid #dcdfe6;
+          .ql-editor {
+            border: none;
+            :deep(.ql-video) {
+              width: 100%;
               max-width: 100%;
-              max-height: 100%;
+              height: 2.5rem;
             }
           }
-          .p-name {
-            cursor: pointer;
-            margin: 0 auto;
-            width: 80%;
-            text-align: center;
-            &:hover {
-              color: #ffbf6c;
-              font-weight: bold;
-            }
-          }
-          .item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-          }
-        }
-        .pagination {
-          width: 100%;
-          padding: 0.05rem 0;
-          display: flex;
-          justify-content: center;
         }
       }
+    }
+  }
+  @media only screen and (max-width: 992px) {
+    .products-content {
+      margin: 0;
     }
   }
 }

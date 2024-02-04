@@ -4,7 +4,7 @@
       <img src="https://dummyimage.com/1200x200/ccc/fff" alt="" />
     </div>
     <div class="products-content" v-loading="state.loading">
-      <div class="left">
+      <div class="left hidden-md-and-down">
         <el-menu :default-openeds="['0']" ref="elMenuRef">
           <el-sub-menu v-for="(item, index) in state.productsClassList" :key="item.id" :index="String(index)">
             <template #title>
@@ -30,7 +30,7 @@
         </div>
         <div class="product-list">
           <el-row>
-            <el-col :md="6" :sm="8" v-for="(item, index) in state.productsList" :key="index">
+            <el-col :md="6" :sm="8" :xs="24" v-for="(item, index) in state.productsList" :key="index">
               <div class="p-item">
                 <div class="img-wrap">
                   <img :src="item.avatar" :alt="item.productNameEn" class="p-img" />
@@ -43,7 +43,7 @@
             </el-col>
           </el-row>
           <el-row>
-            <div class="pagination">
+            <div class="pagination p-md">
               <el-pagination
                 v-model:currentPage="state.queryParams.pageNum"
                 v-model:page-size="state.queryParams.pageSize"
@@ -53,6 +53,15 @@
                 @size-change="handleSizeChange"
                 @current-change="handleCurrentChange"
                 layout="total, sizes, prev, pager, next, jumper" />
+            </div>
+            <div class="pagination p-xs">
+              <el-pagination
+                v-model:currentPage="state.queryParams.pageNum"
+                v-model:page-size="state.queryParams.pageSize"
+                layout="prev, pager, next"
+                @size-change="handleSizeChange"
+                @current-change="handleCurrentChange"
+                :total="state.total" />
             </div>
           </el-row>
         </div>
@@ -99,7 +108,6 @@ const handleGetProductsList = async () => {
   try {
     state.loading = true;
     const queryStr = new URLSearchParams(state.queryParams).toString();
-    console.log(queryStr);
     // const res = await useFetch(`${baseUrl}/web-api/webOffice/product/list`);
     const res = await $fetch(`${baseUrl}/web-api/webOffice/product/list?${queryStr}`);
     if (res.code === 200) {
@@ -199,6 +207,27 @@ const handleSizeChange = (val: number) => {
           padding: 0.05rem 0;
           display: flex;
           justify-content: center;
+        }
+        .p-md {
+          display: flex;
+        }
+        .p-xs {
+          display: none;
+        }
+      }
+    }
+  }
+  @media only screen and (max-width: 992px) {
+    .products-content {
+      margin: 0 0.1rem;
+      .right {
+        .product-list {
+          .p-md {
+            display: none;
+          }
+          .p-xs {
+            display: flex;
+          }
         }
       }
     }

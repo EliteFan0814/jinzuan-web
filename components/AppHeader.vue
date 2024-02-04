@@ -27,7 +27,7 @@
             <li
               v-for="item in state.navigationList"
               :key="item.label"
-              :class="{ 'li-active': item.route === route.path }">
+              :class="{ 'li-active': item.activeList.includes(route.name) }">
               <el-popover v-if="item.hasChild" placement="bottom" trigger="hover">
                 <template #reference>
                   <NuxtLink :to="item.route">{{ item.label }}</NuxtLink>
@@ -38,6 +38,25 @@
             </li>
           </ul>
         </div>
+        <div class="navigation n-phone">
+          <el-dropdown>
+            <div>
+              <svg class="icon menumore" aria-hidden="true">
+                <use xlink:href="#icon-menu"></use>
+              </svg>
+            </div>
+            <!-- <svg class="icon menumore" aria-hidden="true">
+              <use xlink:href="#icon-menu"></use>
+            </svg> -->
+            <template #dropdown>
+              <el-dropdown-menu>
+                <el-dropdown-item v-for="item in state.navigationList" :key="item.label">
+                  <NuxtLink :to="item.route">{{ item.label }}</NuxtLink>
+                </el-dropdown-item>
+              </el-dropdown-menu>
+            </template>
+          </el-dropdown>
+        </div>
       </div>
     </el-affix>
   </header>
@@ -47,21 +66,19 @@ const state = reactive({
   metaTitle: "金钻",
   metaContent: "金钻",
   navigationList: [
-    { label: "home", hasChild: false, route: "/" },
-    { label: "about", hasChild: false, route: "/about" },
-    // { label: "solutions", hasChild: true, route: "/solutions" },
-    { label: "products", hasChild: true, route: "/products" },
-    { label: "news", hasChild: false, route: "/news" },
-    // { label: "downloads", hasChild: false, route: "/downloads" },
-    // { label: "contacts", hasChild: false, route: "/contacts" },
+    { label: "home", hasChild: false, route: "/", activeList: ["index"] },
+    { label: "about", hasChild: false, route: "/about", activeList: ["about"] },
+    // { label: "solutions", hasChild: true, route: "/solutions",activeList: ["solutions"] },
+    { label: "products", hasChild: false, route: "/products", activeList: ["products", "webProducts-productId"] },
+    { label: "news", hasChild: false, route: "/news", activeList: ["news"] },
+    // { label: "downloads", hasChild: false, route: "/downloads",activeList: ["downloads"] },
+    // { label: "contacts", hasChild: false, route: "/contacts",activeList: ["contacts"] },
   ],
 });
 const route = useRoute();
 </script>
 <style lang="scss" scoped>
 header {
-  // margin: 0 auto;
-  // padding: 0.05rem 0.1rem;
   .contact-wrap {
     padding: 0.05rem 0.1rem;
     color: #fff;
@@ -114,6 +131,24 @@ header {
         .li-active {
           font-weight: bold;
           color: #f5a63f;
+        }
+      }
+    }
+    .n-phone {
+      display: none;
+    }
+  }
+  @media only screen and (max-width: 992px) {
+    .navigate-wrap {
+      .logo-wrap {
+        .logo-img {
+          width: 150px;
+        }
+      }
+      .n-phone {
+        display: block;
+        .menumore {
+          font-size: 20px;
         }
       }
     }

@@ -74,6 +74,8 @@ const state = reactive({
 </script>
 <style lang="scss" scoped>
 .footer {
+  position: relative;
+  z-index: 3;
   background-color: #1a1a1a;
   color: #fff;
   .f-1 {
@@ -94,9 +96,6 @@ const state = reactive({
         margin: 0;
         margin-bottom: 0.1rem;
         font-size: 0.12rem;
-        @media only screen and (max-width: 992px) {
-          font-size: 18px;
-        }
       }
       .f-c-item {
         margin-bottom: 0.05rem;
@@ -108,6 +107,18 @@ const state = reactive({
             cursor: pointer;
             text-decoration: underline;
           }
+        }
+
+      }
+    }
+    @media only screen and (max-width: 992px) {
+      font-size: 14px;
+      .f-contact {
+        h4 {
+          font-size: 18px;
+        }
+        .f-c-item {
+          text-align: center;
         }
       }
     }

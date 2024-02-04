@@ -1,9 +1,19 @@
 <template>
-  <AppHeader />
-  <NuxtPage />
-  <AppFooter />
+  <div class="app-wrap">
+    <AppHeader class="app-header" />
+    <NuxtPage class="app-content" />
+    <AppFooter class="app-footer" />
+  </div>
+  <el-backtop />
 </template>
 <script setup>
+useHead({
+  script: [
+    {
+      src: "/js/iconfont.js",
+    },
+  ],
+});
 function flexible() {
   var docEl = document.documentElement;
   var dpr = window.devicePixelRatio || 1;
@@ -50,9 +60,6 @@ function flexible() {
 onMounted(() => {
   flexible();
 });
-// (function flexible(window, document) {
-
-// })(window, document);
 </script>
 
 <style lang="scss">
@@ -81,10 +88,35 @@ body {
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
   }
+  .icon {
+    width: 1em;
+    height: 1em;
+    vertical-align: -0.15em;
+    fill: currentColor;
+    overflow: hidden;
+  }
   @media only screen and (max-width: 992px) {
     * {
       font-size: 14px;
     }
   }
+}
+.app-wrap {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  .app-header {
+    flex-shrink: 0;
+  }
+  .app-content {
+    flex-grow: 1;
+  }
+  .app-footer {
+    flex-shrink: 0;
+  }
+}
+.el-backtop {
+  right: 0.5rem;
+  bottom: 0.5rem;
 }
 </style>
