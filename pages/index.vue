@@ -7,41 +7,42 @@
         <span class="h2-left">PRODUCTS&nbsp;</span>
         <span class="h2-right">CENTER</span>
       </h2>
-      <h3 class="sub-title">
-        主营产品：石油/天然气钻头用金刚石复合片，切削刀具用金刚石复合片和煤田/矿山用金刚石复合片，聚晶金刚石拉丝模坯
-      </h3>
-      <el-row>
-        <el-col :md="8" v-for="(item, index) in state.produstsClassList" :key="index">
+      <h3 class="sub-title">Main Products：Metal Bond、Resin Bond、Electroplated、Vitrified、Brazed</h3>
+      <el-row v-if="state.productsClassList.length > 0">
+        <el-col :md="8" v-for="(item, index) in state.productsClassList" :key="index">
           <div class="products-class">
             <h4 class="p-c-name">
-              <img src="/logo.png" alt="jzdia logo" class="logo-title" />
+              <img src="/logo.png" alt="jzdia" class="logo-title" />
               <span class="omit-1" :title="item.label">{{ item.label }}</span>
             </h4>
-            <div class="p-c-content">
-              <img :src="item.img" alt="" />
-              <div class="hover-info">
-                <p class="present">
-                  公司生产产品广泛应用于石油钻探及矿山开采，电线电缆、木材、陶瓷、金属及其它材料的切割加工等领域。
-                </p>
-                <ul class="feature">
-                  <li>
-                    <span class="point">●</span>
-                    <span class="f-item">金刚石复合片</span>
-                  </li>
-                  <li>
-                    <span class="point">●</span>
-                    <span class="f-item">金刚石复合片</span>
-                  </li>
-                  <li>
-                    <span class="point">●</span>
-                    <span class="f-item">金刚石复合片</span>
-                  </li>
-                </ul>
+            <NuxtLink to="/products">
+              <div class="p-c-content">
+                <img :src="item.avatar" alt="" />
+                <div class="hover-info">
+                  <p class="present">
+                    {{ item.leader }}
+                  </p>
+                  <!-- <ul class="feature">
+                    <li>
+                      <span class="point">●</span>
+                      <span class="f-item">金刚石复合片</span>
+                    </li>
+                    <li>
+                      <span class="point">●</span>
+                      <span class="f-item">金刚石复合片</span>
+                    </li>
+                    <li>
+                      <span class="point">●</span>
+                      <span class="f-item">金刚石复合片</span>
+                    </li>
+                  </ul> -->
+                </div>
               </div>
-            </div>
+            </NuxtLink>
           </div>
         </el-col>
       </el-row>
+      <el-empty v-else description="No Data" />
     </section>
     <!-- 新闻中心 -->
     <section class="news">
@@ -49,56 +50,73 @@
         <span class="h2-left">NEWS&nbsp;</span>
         <span class="h2-right">CENTER</span>
       </h2>
-      <h3 class="sub-title">公司新闻、最新行业动态实时更新</h3>
-      <div class="news-wrap">
+      <h3 class="sub-title">Company news and latest industry trends</h3>
+      <div v-if="state.newsList.length > 0" class="news-wrap">
         <div class="news-item" v-for="(item, index) in state.newsList" :key="index">
           <el-row>
             <el-col :md="6">
               <div>
-                <span class="news-class">{{ item.type }}</span>
-                <time>{{ item.time }}</time>
+                <span class="news-class">News</span>
+                <time>{{ item.createTime?.slice(0, 10) }}</time>
               </div>
             </el-col>
             <el-col :md="18">
-              <div class="news-title omit-1">{{ item.title }}</div>
+              <div class="news-title omit-1">
+                <NuxtLink :to="`/webNews/${item.newsId}`">{{ item.newsName }}</NuxtLink>
+              </div>
             </el-col>
           </el-row>
         </div>
         <div class="more">
-          <button class="common-btn">More</button>
+          <button class="common-btn"><NuxtLink :to="`/news/`">More</NuxtLink></button>
         </div>
       </div>
+      <el-empty v-else description="No Data" />
     </section>
   </main>
 </template>
 
 <script lang="ts" setup>
+//     { label: '电子、半导体、金刚石', img: 'https://dummyimage.com/600x400/ccc/fff' }
 const state = reactive({
-  produstsClassList: [
-    {
-      label: "电子、半导体、子、半导体、金刚子、半导体、金刚子、半导体、金刚金刚石",
-      img: "https://dummyimage.com/600x400/ccc/fff",
-    },
-    { label: "电子、半导体、金刚石", img: "https://dummyimage.com/600x400/ccc/fff" },
-    { label: "电子、半导体、金刚石", img: "https://dummyimage.com/600x400/ccc/fff" },
-    { label: "电子、半导体、金刚石", img: "https://dummyimage.com/600x400/ccc/fff" },
-    { label: "电子、半导体、金刚石", img: "https://dummyimage.com/600x400/ccc/fff" },
-    { label: "电子、半导体、金刚石", img: "https://dummyimage.com/600x400/ccc/fff" },
-  ],
-  newsList: [
-    {
-      title:
-        "新闻报道新闻报道新闻报道新闻报道新闻报道新闻报道新闻新闻报道新闻报道新闻报道新闻报道新闻报道新闻报道新闻报道新闻报道报道新闻报道",
-      time: "2023-10-30",
-      id: 1,
-      type: "新闻报道",
-    },
-    { title: "新闻报道新闻报道新闻报道新闻报道", time: "2023-10-30", id: 1, type: "新闻报道" },
-    { title: "新闻报道新闻报道新闻报道新闻报道", time: "2023-10-30", id: 1, type: "新闻报道" },
-    { title: "新闻报道新闻报道新闻报道新闻报道", time: "2023-10-30", id: 1, type: "新闻报道" },
-    { title: "新闻报道新闻报道新闻报道新闻报道", time: "2023-10-30", id: 1, type: "新闻报道" },
-  ],
-});
+  loading: false,
+  productsClassList: [],
+  newsList: []
+})
+const config = useRuntimeConfig()
+const baseUrl = config.public.apiBaseUrl
+onMounted(async () => {
+  await handleGetProductsClassList()
+  await handleGetNewsList()
+})
+// 获取产品分类
+const handleGetProductsClassList = async () => {
+  try {
+    state.loading = true
+    // const res = await useFetch(`${baseUrl}/web-api/webOffice/product/productsClassTree`);
+    const res = await $fetch(`${baseUrl}/web-api/webOffice/product/productsClassTree`)
+    if (res.code === 200) {
+      state.productsClassList = res.data[0].children
+    }
+  } catch (err) {
+  } finally {
+    state.loading = false
+  }
+}
+// 获取新闻列表
+const handleGetNewsList = async () => {
+  try {
+    state.loading = true
+    // const res = await useFetch(`${baseUrl}/web-api/webOffice/product/list`);
+    const res: any = await $fetch(`${baseUrl}/web-api/webOffice/news/list?pageNum=1&pageSize=10`)
+    if (res.code === 200) {
+      state.newsList = res.rows
+    }
+  } catch (err) {
+  } finally {
+    state.loading = false
+  }
+}
 </script>
 
 <style lang="scss" scoped>

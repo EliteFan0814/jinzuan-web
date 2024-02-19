@@ -7,7 +7,7 @@
       <img src="https://dummyimage.com/1200x200/ccc/fff" alt="" />
     </div>
     <div class="newss-content" v-loading="state.loading">
-      <el-affix :offset="100" class="left hidden-md-and-down" style="z-index: 2">
+      <el-affix :offset="100" class="left hidden-md-and-down" style="z-index:2;">
         <div>
           <div class="link-wrap">
             <h2>Get Social</h2>
@@ -38,15 +38,13 @@
             <h2>Phone / WhatsApp</h2>
             <div class="icon-wrap phone">
               <a
-                href="//wa.me/8618117002521?text=Hello, I+am+Alexis+Ye+from+Zhengzhou+Jinzuan+Diamond+Tools+Co.,+Ltd.+Welcome+to+your+inquiry."
-              >
+                href="//wa.me/8618117002521?text=Hello, I+am+Alexis+Ye+from+Zhengzhou+Jinzuan+Diamond+Tools+Co.,+Ltd.+Welcome+to+your+inquiry.">
                 <svg class="icon" aria-hidden="true">
                   <use xlink:href="#icon-whatsapp"></use>
                 </svg>
               </a>
               <a
-                href="//wa.me/8618117002521?text=Hello, I+am+Alexis+Ye+from+Zhengzhou+Jinzuan+Diamond+Tools+Co.,+Ltd.+Welcome+to+your+inquiry."
-              >
+                href="//wa.me/8618117002521?text=Hello, I+am+Alexis+Ye+from+Zhengzhou+Jinzuan+Diamond+Tools+Co.,+Ltd.+Welcome+to+your+inquiry.">
                 +86 18117002521
               </a>
             </div>
@@ -73,106 +71,58 @@
         </div>
       </el-affix>
       <!-- <div class="left-div"></div> -->
-      <div v-if="state.newsList.length > 0" class="right">
+      <div class="right">
         <div class="bread-wrap">
           <el-breadcrumb separator="/">
             <el-breadcrumb-item :to="{ path: '/' }">Home</el-breadcrumb-item>
             <el-breadcrumb-item><NuxtLink to="/news">News List</NuxtLink></el-breadcrumb-item>
+            <el-breadcrumb-item>{{ state.newsName }}</el-breadcrumb-item>
           </el-breadcrumb>
         </div>
         <div class="news-content">
-          <div class="news-item" v-for="(item, index) in state.newsList" :key="index">
-            <el-row>
-              <el-col :md="5">
-                <div class="img-wrap">
-                  <img :src="item.avatar" :alt="item.newsName" class="p-img" />
-                </div>
-              </el-col>
-              <el-col :md="19">
-                <div class="title-wrap">
-                  <div class="title">{{ item.newsName }}</div>
-                  <div class="time">{{ item.createTime }}</div>
-                </div>
-                <div class="more">
-                  <button class="common-btn">
-                    <NuxtLink :to="`/webNews/${item.newsId}`">More</NuxtLink>
-                  </button>
-                </div>
-              </el-col>
-            </el-row>
-          </div>
+          <el-row>
+            <el-col>
+              <div class="ql-container ql-snow">
+                <div class="ql-editor" v-html="state.content"></div>
+              </div>
+            </el-col>
+          </el-row>
         </div>
-        <el-row>
-          <div class="pagination p-md">
-            <el-pagination
-              v-model:currentPage="state.queryParams.pageNum"
-              v-model:page-size="state.queryParams.pageSize"
-              :total="state.total"
-              :page-sizes="[10, 20, 50, 100]"
-              background
-              @size-change="handleSizeChange"
-              @current-change="handleCurrentChange"
-              layout="total, sizes, prev, pager, next, jumper"
-            />
-          </div>
-          <div class="pagination p-xs">
-            <el-pagination
-              v-model:currentPage="state.queryParams.pageNum"
-              v-model:page-size="state.queryParams.pageSize"
-              layout="prev, pager, next"
-              @size-change="handleSizeChange"
-              @current-change="handleCurrentChange"
-              :total="state.total"
-            />
-          </div>
-        </el-row>
       </div>
-      <el-empty v-else description="No Data" />
     </div>
   </div>
 </template>
 <script lang="ts" setup>
-const route = useRoute()
+
+const route = useRoute();
 const state = reactive({
   loading: false,
-  newsList: [],
-  total: 0,
-  queryParams: {
-    pageNum: 1,
-    pageSize: 10
-  }
-})
-const config = useRuntimeConfig()
-const baseUrl = config.public.apiBaseUrl
+  newsId: route.params.newsId,
+  newsName: "",
+  content: "",
+});
+const config = useRuntimeConfig();
+const baseUrl = config.public.apiBaseUrl;
 onMounted(async () => {
-  await handleGetNewsList()
-})
+  await handleGetNewssDetail();
+});
 // 获取新闻详情
-const handleGetNewsList = async () => {
+const handleGetNewssDetail = async () => {
   try {
-    state.loading = true
-    const queryStr = new URLSearchParams(state.queryParams).toString()
-    const res: any = await $fetch(`${baseUrl}/web-api/webOffice/news/list?${queryStr}`)
+    state.loading = true;
+    const res: any = await $fetch(`${baseUrl}/web-api/webOffice/news/${state.newsId}`);
     if (res.code === 200) {
-      state.newsList = res.rows
-      state.total = res.total
+      state.content = res.data.content;
+      state.newsName = res.data.newsName;
     }
   } catch (err) {
   } finally {
-    state.loading = false
+    state.loading = false;
   }
-}
-const handleCurrentChange = (val: number) => {
-  handleGetNewsList()
-}
-// 改变页面容量
-const handleSizeChange = (val: number) => {
-  state.queryParams.pageNum = 1
-  state.queryParams.pageSize = val
-  handleGetNewsList()
-}
+};
 </script>
 <style lang="scss" scoped>
+
 .newss-wrap {
   .head {
     img {
@@ -234,80 +184,23 @@ const handleSizeChange = (val: number) => {
         margin-bottom: 0.1rem;
       }
       .news-content {
-        .news-item {
-          border-bottom: 1px solid #ebebeb;
-          padding: 0.06rem 0;
-          margin-bottom: 0.05rem;
-          // background-color: #ebebeb;
-          .img-wrap {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 100%;
-            margin: 0 auto;
-            height: 150px;
-            // margin-bottom: 0.05rem;
-            // border: 1px solid red;
-            .p-img {
-              display: block;
+        .ql-container {
+          border: 1px solid #dcdfe6;
+          .ql-editor {
+            border: none;
+            :deep(.ql-video) {
+              width: 100%;
               max-width: 100%;
-              max-height: 100%;
-            }
-          }
-          .title-wrap {
-            padding: 0.05rem;
-            font-size: 0.1rem;
-            .title {
-              font-weight: bold;
-            }
-            .time {
-              padding: 0.08rem 0 0.02rem;
-              font-size: 12px;
-              color: #9b9b9b;
-            }
-          }
-          .more {
-            padding: 0.05rem;
-            .common-btn {
-              color: #151515;
-              background-color: #ccc;
-              border: none;
-              padding: 0.05rem 0.1rem;
-              cursor: pointer;
-              transition: all 0.2s;
-              &:hover {
-                background-color: #f5a63f;
-                color: #fff;
-              }
+              height: 2.5rem;
             }
           }
         }
-      }
-      .pagination {
-        width: 100%;
-        padding: 0.05rem 0;
-        display: flex;
-        justify-content: center;
-      }
-      .p-md {
-        display: flex;
-      }
-      .p-xs {
-        display: none;
       }
     }
   }
   @media only screen and (max-width: 992px) {
     .newss-content {
       margin: 0;
-      .right {
-        .p-md {
-          display: none;
-        }
-        .p-xs {
-          display: flex;
-        }
-      }
     }
   }
 }

@@ -5,14 +5,15 @@
       <Meta name="description" :content="state.metaContent" />
       <Meta
         name="viewport"
-        content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no" />
+        content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no"
+      />
     </Head>
 
     <div class="contact-wrap">
-      <div class="c-left">欢迎访问中国金钻</div>
+      <div class="c-left">Welcome to China Zhengzhou Jinzuan</div>
       <div class="c-right">
         <span>
-          联系邮箱：
+          Email：
           <a class="mail" href="mailto:cartroyal@gmail.com">cartroyal@gmail.com</a>
         </span>
       </div>
@@ -27,7 +28,8 @@
             <li
               v-for="item in state.navigationList"
               :key="item.label"
-              :class="{ 'li-active': item.activeList.includes(route.name) }">
+              :class="{ 'li-active': item.activeList.includes(route.name) }"
+            >
               <el-popover v-if="item.hasChild" placement="bottom" trigger="hover">
                 <template #reference>
                   <NuxtLink :to="item.route">{{ item.label }}</NuxtLink>
@@ -63,19 +65,19 @@
 </template>
 <script lang="ts" setup>
 const state = reactive({
-  metaTitle: "金钻",
-  metaContent: "金钻",
+  metaTitle: '金钻',
+  metaContent: '金钻',
   navigationList: [
-    { label: "home", hasChild: false, route: "/", activeList: ["index"] },
-    { label: "about", hasChild: false, route: "/about", activeList: ["about"] },
+    { label: 'home', hasChild: false, route: '/', activeList: ['index'] },
+    { label: 'about', hasChild: false, route: '/about', activeList: ['about'] },
     // { label: "solutions", hasChild: true, route: "/solutions",activeList: ["solutions"] },
-    { label: "products", hasChild: false, route: "/products", activeList: ["products", "webProducts-productId"] },
-    { label: "news", hasChild: false, route: "/news", activeList: ["news"] },
+    { label: 'products', hasChild: false, route: '/products', activeList: ['products', 'webProducts-productId'] },
+    { label: 'news', hasChild: false, route: '/news', activeList: ['news'] }
     // { label: "downloads", hasChild: false, route: "/downloads",activeList: ["downloads"] },
     // { label: "contacts", hasChild: false, route: "/contacts",activeList: ["contacts"] },
-  ],
-});
-const route = useRoute();
+  ]
+})
+const route = useRoute()
 </script>
 <style lang="scss" scoped>
 header {
@@ -139,6 +141,12 @@ header {
     }
   }
   @media only screen and (max-width: 992px) {
+    .contact-wrap {
+      .c-left,
+      .c-right {
+        font-size: 12px !important;
+      }
+    }
     .navigate-wrap {
       .logo-wrap {
         .logo-img {
