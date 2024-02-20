@@ -13,11 +13,15 @@
           <div class="products-class">
             <h4 class="p-c-name">
               <img src="/logo.png" alt="jzdia" class="logo-title" />
-              <span class="omit-1" :title="item.label">{{ item.label }}</span>
+              <NuxtLink to="/products">
+                <span class="omit-1" :title="item.labelEn">{{ item.labelEn }}</span>
+              </NuxtLink>
             </h4>
             <NuxtLink to="/products">
               <div class="p-c-content">
-                <img :src="item.avatar" alt="" />
+                <div class="img-wrap">
+                  <img :src="item.avatar" alt="" />
+                </div>
                 <div class="hover-info">
                   <p class="present">
                     {{ item.leader }}
@@ -81,42 +85,42 @@
 const state = reactive({
   loading: false,
   productsClassList: [],
-  newsList: []
-})
-const config = useRuntimeConfig()
-const baseUrl = config.public.apiBaseUrl
+  newsList: [],
+});
+const config = useRuntimeConfig();
+const baseUrl = config.public.apiBaseUrl;
 onMounted(async () => {
-  await handleGetProductsClassList()
-  await handleGetNewsList()
-})
+  await handleGetProductsClassList();
+  await handleGetNewsList();
+});
 // 获取产品分类
 const handleGetProductsClassList = async () => {
   try {
-    state.loading = true
+    state.loading = true;
     // const res = await useFetch(`${baseUrl}/web-api/webOffice/product/productsClassTree`);
-    const res = await $fetch(`${baseUrl}/web-api/webOffice/product/productsClassTree`)
+    const res = await $fetch(`${baseUrl}/web-api/webOffice/product/productsClassTree`);
     if (res.code === 200) {
-      state.productsClassList = res.data[0].children
+      state.productsClassList = res.data[0].children;
     }
   } catch (err) {
   } finally {
-    state.loading = false
+    state.loading = false;
   }
-}
+};
 // 获取新闻列表
 const handleGetNewsList = async () => {
   try {
-    state.loading = true
+    state.loading = true;
     // const res = await useFetch(`${baseUrl}/web-api/webOffice/product/list`);
-    const res: any = await $fetch(`${baseUrl}/web-api/webOffice/news/list?pageNum=1&pageSize=10`)
+    const res: any = await $fetch(`${baseUrl}/web-api/webOffice/news/list?pageNum=1&pageSize=10`);
     if (res.code === 200) {
-      state.newsList = res.rows
+      state.newsList = res.rows;
     }
   } catch (err) {
   } finally {
-    state.loading = false
+    state.loading = false;
   }
-}
+};
 </script>
 
 <style lang="scss" scoped>
@@ -169,9 +173,17 @@ const handleGetNewsList = async () => {
       }
       .p-c-content {
         position: relative;
-        img {
+        .img-wrap {
+          display: flex;
+          align-items: center;
+          justify-content: center;
           width: 100%;
-          display: block;
+          // height: 400px;
+          img {
+            max-width: 100%;
+            max-height: 100%;
+            display: block;
+          }
         }
         .hover-info {
           // display: none;

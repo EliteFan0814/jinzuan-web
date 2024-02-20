@@ -3,6 +3,7 @@
     <div class="head">
       <!-- <img src="https://dummyimage.com/1200x200/ccc/fff" alt="" /> -->
       <img :src="productsImg" alt="" />
+      <span class="head-title">Products</span>
     </div>
     <div class="products-content" v-loading="state.loading">
       <div class="left hidden-md-and-down">
@@ -150,6 +151,16 @@ const handleSizeChange = (val: number) => {
 <style lang="scss" scoped>
 .products-wrap {
   .head {
+    position: relative;
+    .head-title {
+      color: #fff;
+      font-size: 0.5rem;
+      font-weight: 600;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
     img {
       width: 100%;
     }

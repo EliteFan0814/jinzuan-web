@@ -6,6 +6,7 @@
     <div class="head">
       <!-- <img src="https://dummyimage.com/1200x200/ccc/fff" alt="" /> -->
       <img :src="aboutImg" alt="" />
+      <span class="head-title">About Us</span>
     </div>
     <div class="about-content" v-loading="state.loading">
       <el-affix :offset="100" class="left hidden-md-and-down" style="z-index: 2">
@@ -180,6 +181,16 @@ const state = reactive({
 <style lang="scss" scoped>
 .about-wrap {
   .head {
+    position: relative;
+    .head-title {
+      color: #fff;
+      font-size: 0.5rem;
+      font-weight: 600;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
     img {
       width: 100%;
     }

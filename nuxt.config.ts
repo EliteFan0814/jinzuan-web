@@ -31,7 +31,7 @@ export default defineNuxtConfig({
   $production: {
     runtimeConfig: {
       public: {
-        apiBaseUrl: "",
+        apiBaseUrl: "https://www.jzdia.com",
       },
     },
   },

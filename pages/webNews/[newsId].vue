@@ -4,10 +4,12 @@
     <link rel="stylesheet" href="/css/quill.snow.css" />
     <link rel="stylesheet" href="/css/quill.bubble.css" />
     <div class="head">
-      <img src="https://dummyimage.com/1200x200/ccc/fff" alt="" />
+      <!-- <img src="https://dummyimage.com/1200x200/ccc/fff" alt="" />-->
+      <img :src="newsImg" alt="" />
+      <span class="head-title">News</span>
     </div>
     <div class="newss-content" v-loading="state.loading">
-      <el-affix :offset="100" class="left hidden-md-and-down" style="z-index:2;">
+      <el-affix :offset="100" class="left hidden-md-and-down" style="z-index: 2">
         <div>
           <div class="link-wrap">
             <h2>Get Social</h2>
@@ -93,7 +95,7 @@
   </div>
 </template>
 <script lang="ts" setup>
-
+import newsImg from "~/assets/news.jpg";
 const route = useRoute();
 const state = reactive({
   loading: false,
@@ -122,9 +124,18 @@ const handleGetNewssDetail = async () => {
 };
 </script>
 <style lang="scss" scoped>
-
 .newss-wrap {
   .head {
+    position: relative;
+    .head-title {
+      color: #fff;
+      font-size: 0.5rem;
+      font-weight: 600;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
     img {
       width: 100%;
     }
