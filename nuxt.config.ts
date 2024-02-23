@@ -12,6 +12,15 @@ export default defineNuxtConfig({
     // "/css/quill.snow.css",
     // "/css/quill.bubble.css",
   ],
+  app: {
+    head: {
+      charset: "utf-8",
+      viewport: "width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no",
+      htmlAttrs: {
+        lang: "en",
+      },
+    },
+  },
   nitro: {
     devProxy: {
       "/web-api": {

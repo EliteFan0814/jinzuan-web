@@ -1,14 +1,5 @@
 <template>
   <header>
-    <Head>
-      <Title>{{ state.metaTitle }}</Title>
-      <Meta name="description" :content="state.metaContent" />
-      <Meta
-        name="viewport"
-        content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no"
-      />
-    </Head>
-
     <div class="contact-wrap">
       <div class="c-left">Welcome to China Zhengzhou Jinzuan</div>
       <div class="c-right">
@@ -28,8 +19,7 @@
             <li
               v-for="item in state.navigationList"
               :key="item.label"
-              :class="{ 'li-active': item.activeList.includes(route.name) }"
-            >
+              :class="{ 'li-active': item.activeList.includes(route.name) }">
               <el-popover v-if="item.hasChild" placement="bottom" trigger="hover">
                 <template #reference>
                   <NuxtLink :to="item.route">{{ item.label }}</NuxtLink>
@@ -65,19 +55,25 @@
 </template>
 <script lang="ts" setup>
 const state = reactive({
-  metaTitle: '金钻',
-  metaContent: '金钻',
   navigationList: [
-    { label: 'home', hasChild: false, route: '/', activeList: ['index'] },
-    { label: 'about', hasChild: false, route: '/about', activeList: ['about'] },
+    { label: "home", hasChild: false, route: "/", activeList: ["index"] },
+    { label: "about", hasChild: false, route: "/about", activeList: ["about"] },
     // { label: "solutions", hasChild: true, route: "/solutions",activeList: ["solutions"] },
-    { label: 'products', hasChild: false, route: '/products', activeList: ['products', 'webProducts-productId'] },
-    { label: 'news', hasChild: false, route: '/news', activeList: ['news'] }
+    { label: "products", hasChild: false, route: "/products", activeList: ["products", "webProducts-productId"] },
+    { label: "news", hasChild: false, route: "/news", activeList: ["news", "news-newsId"] },
     // { label: "downloads", hasChild: false, route: "/downloads",activeList: ["downloads"] },
     // { label: "contacts", hasChild: false, route: "/contacts",activeList: ["contacts"] },
-  ]
-})
-const route = useRoute()
+  ],
+});
+const route = useRoute();
+useHead({
+  title:
+    "JinZuan is a diversified global abrasives manufacturing company that brings products and technologies together.",
+  meta: [
+    { name: "description", content: "Diamond cutting blades factory supply from China with premium quality since 2008." },
+    { name: "keywords", content: "diamond blade factroy, tile diamond blade, grind wheel diamond,diamond cup wheel,diamond cutting disc, resin diamond blade" },
+  ],
+});
 </script>
 <style lang="scss" scoped>
 header {

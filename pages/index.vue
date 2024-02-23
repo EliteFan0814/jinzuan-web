@@ -111,7 +111,8 @@ const handleGetProductsClassList = async () => {
 const handleGetNewsList = async () => {
   try {
     state.loading = true;
-    // const res = await useFetch(`${baseUrl}/web-api/webOffice/product/list`);
+    // const { data, pending } = await useFetch(`${baseUrl}/web-api/webOffice/news/list?pageNum=1&pageSize=10`);
+    // const res: any = data.value;
     const res: any = await $fetch(`${baseUrl}/web-api/webOffice/news/list?pageNum=1&pageSize=10`);
     if (res.code === 200) {
       state.newsList = res.rows;

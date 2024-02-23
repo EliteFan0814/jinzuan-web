@@ -1,5 +1,11 @@
 <template>
   <div class="products-wrap">
+    <!-- <Head>
+      <Title>{{ state.productNameEn }}</Title>
+      <Meta name="description" :content="state.remark" />
+      <Meta name="keywords" :content="state.remark" />
+      <Meta name="fpc" :content="state.remark" />
+    </Head> -->
     <link rel="stylesheet" href="/css/quill.core.css" />
     <link rel="stylesheet" href="/css/quill.snow.css" />
     <link rel="stylesheet" href="/css/quill.bubble.css" />
@@ -97,7 +103,6 @@
 </template>
 <script lang="ts" setup>
 import productsImg from "~/assets/products.jpg";
-
 const route = useRoute();
 const state = reactive({
   loading: false,
@@ -107,29 +112,61 @@ const state = reactive({
   productName: "",
   productNameEn: "",
   content: "",
+  remark: "",
 });
 const config = useRuntimeConfig();
 const baseUrl = config.public.apiBaseUrl;
-onMounted(async () => {
-  await handleGetProductsDetail();
-});
-// 获取产品详情
-const handleGetProductsDetail = async () => {
-  try {
-    state.loading = true;
-    const res: any = await $fetch(`${baseUrl}/web-api/webOffice/product/${state.productId}`);
-    if (res.code === 200) {
-      state.content = res.data.content;
-      state.productClassName = res.data.productClass.productClassName;
-      state.productClassNameEn = res.data.productClass.productClassNameEn;
-      state.productName = res.data.productName;
-      state.productNameEn = res.data.productNameEn;
-    }
-  } catch (err) {
-  } finally {
-    state.loading = false;
+// onMounted(async () => {
+//   await handleGetProductsDetail();
+//   useHead({
+//     title: state.productNameEn,
+//     meta: [
+//       { name: "description", content: state.remark },
+//       { name: "keywords", content: state.remark },
+//     ],
+//   });
+// });
+
+nextTick(async () => {
+  const { data, pending } = await useFetch(`${baseUrl}/web-api/webOffice/product/${state.productId}`);
+  const res: any = data.value;
+  if (res.code === 200) {
+    state.content = res.data.content;
+    state.remark = res.data.remark;
+    state.productClassName = res.data.productClass.productClassName;
+    state.productClassNameEn = res.data.productClass.productClassNameEn;
+    state.productName = res.data.productName;
+    state.productNameEn = res.data.productNameEn;
+    useHead({
+      title: state.productNameEn,
+      meta: [
+        { name: "description", content: state.remark },
+        { name: "keywords", content: state.remark },
+      ],
+    });
   }
-};
+});
+
+// 获取产品详情
+// const handleGetProductsDetail = async () => {
+//   try {
+//     state.loading = true;
+//     const res: any = await $fetch(`${baseUrl}/web-api/webOffice/product/${state.productId}`);
+//     // const { data, pending } = await useFetch(`${baseUrl}/web-api/webOffice/product/${state.productId}`);
+//     // const res: any = data.value;
+//     if (res.code === 200) {
+//       state.content = res.data.content;
+//       state.remark = res.data.remark;
+//       state.productClassName = res.data.productClass.productClassName;
+//       state.productClassNameEn = res.data.productClass.productClassNameEn;
+//       state.productName = res.data.productName;
+//       state.productNameEn = res.data.productNameEn;
+//     }
+//   } catch (err) {
+//   } finally {
+//     state.loading = false;
+//   }
+// };
 </script>
 <style lang="scss" scoped>
 .products-wrap {

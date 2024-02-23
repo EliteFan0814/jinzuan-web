@@ -1,7 +1,9 @@
 <template>
   <div class="app-wrap">
     <AppHeader class="app-header" />
-    <NuxtPage class="app-content" />
+    <NuxtLayout>
+      <NuxtPage class="app-content" />
+    </NuxtLayout>
     <AppFooter class="app-footer" />
   </div>
   <el-backtop />
