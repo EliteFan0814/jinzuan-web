@@ -102,26 +102,45 @@ const state = reactive({
   newsId: route.params.newsId,
   newsName: "",
   content: "",
+  remark: "",
 });
 const config = useRuntimeConfig();
 const baseUrl = config.public.apiBaseUrl;
-onMounted(async () => {
-  await handleGetNewssDetail();
-});
-// 获取新闻详情
-const handleGetNewssDetail = async () => {
-  try {
-    state.loading = true;
-    const res: any = await $fetch(`${baseUrl}/web-api/webOffice/news/${state.newsId}`);
-    if (res.code === 200) {
-      state.content = res.data.content;
-      state.newsName = res.data.newsName;
-    }
-  } catch (err) {
-  } finally {
-    state.loading = false;
+// onMounted(async () => {
+//   await handleGetNewssDetail();
+// });
+
+nextTick(async () => {
+  const { data, pending } = await useFetch(`${baseUrl}/web-api/webOffice/news/${state.newsId}`);
+  const res: any = data.value;
+  if (res.code === 200) {
+    state.content = res.data.content;
+    state.newsName = res.data.newsName;
+    state.remark = res.data.remark;
+    useHead({
+      title: state.newsName,
+      meta: [
+        { name: "description", content: state.newsName },
+        { name: "keywords", content: state.remark },
+      ],
+    });
   }
-};
+});
+
+// 获取新闻详情
+// const handleGetNewssDetail = async () => {
+//   try {
+//     state.loading = true;
+//     const res: any = await $fetch(`${baseUrl}/web-api/webOffice/news/${state.newsId}`);
+//     if (res.code === 200) {
+//       state.content = res.data.content;
+//       state.newsName = res.data.newsName;
+//     }
+//   } catch (err) {
+//   } finally {
+//     state.loading = false;
+//   }
+// };
 </script>
 <style lang="scss" scoped>
 .newss-wrap {

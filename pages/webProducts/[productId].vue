@@ -2,9 +2,8 @@
   <div class="products-wrap">
     <!-- <Head>
       <Title>{{ state.productNameEn }}</Title>
-      <Meta name="description" :content="state.remark" />
+      <Meta name="keywords" :content="state.productNameEn" />
       <Meta name="keywords" :content="state.remark" />
-      <Meta name="fpc" :content="state.remark" />
     </Head> -->
     <link rel="stylesheet" href="/css/quill.core.css" />
     <link rel="stylesheet" href="/css/quill.snow.css" />
@@ -140,7 +139,7 @@ nextTick(async () => {
     useHead({
       title: state.productNameEn,
       meta: [
-        { name: "description", content: state.remark },
+        { name: "description", content: state.productNameEn },
         { name: "keywords", content: state.remark },
       ],
     });
