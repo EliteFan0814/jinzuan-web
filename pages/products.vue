@@ -7,7 +7,7 @@
     </div>
     <div class="products-content" v-loading="state.loading">
       <div class="left hidden-md-and-down">
-        <el-menu :default-openeds="['0']" ref="elMenuRef">
+        <!-- <el-menu :default-openeds="['0']" ref="elMenuRef">
           <el-sub-menu v-for="(item, index) in state.productsClassList" :key="item.id" :index="String(index)">
             <template #title>
               <span @click.stop="handleSearchAll">{{ item.labelEn }}</span>
@@ -16,12 +16,18 @@
               v-for="(innerItem, innerIndex) in item.children"
               :key="innerItem.id"
               :index="String(index) + '-' + String(innerIndex)"
-              @click="handleClassSearch(innerItem)"
-            >
+              @click="handleClassSearch(innerItem)">
               {{ innerItem.labelEn }}
             </el-menu-item>
           </el-sub-menu>
-        </el-menu>
+        </el-menu> -->
+        <el-tree
+          style="max-width: 600px"
+          node-key="id"
+          :default-expanded-keys="[100]"
+          :data="state.productsClassList"
+          :props="state.defaultProps"
+          @node-click="handleNodeClick" />
       </div>
       <div class="right">
         <div class="bread-wrap">
@@ -55,8 +61,7 @@
                 background
                 @size-change="handleSizeChange"
                 @current-change="handleCurrentChange"
-                layout="total, sizes, prev, pager, next, jumper"
-              />
+                layout="total, sizes, prev, pager, next, jumper" />
             </div>
             <div class="pagination p-xs">
               <el-pagination
@@ -65,8 +70,7 @@
                 layout="prev, pager, next"
                 @size-change="handleSizeChange"
                 @current-change="handleCurrentChange"
-                :total="state.total"
-              />
+                :total="state.total" />
             </div>
           </el-row>
         </div>
@@ -76,77 +80,87 @@
   </div>
 </template>
 <script lang="ts" setup>
-import productsImg from '~/assets/products.jpg'
+import productsImg from "~/assets/products.jpg";
 
 const state = reactive({
   loading: false,
-  activeClass: '',
+  activeClass: "",
   productsClassList: [] as any,
   productsList: [] as any,
   total: 0,
+  defaultProps: {
+    children: "children",
+    label: "labelEn",
+  },
   queryParams: {
     pageNum: 1,
     pageSize: 10,
-    classId: ''
-  }
-})
-const elMenuRef = ref()
-const config = useRuntimeConfig()
-const baseUrl = config.public.apiBaseUrl
+    classId: "",
+  },
+});
+const elMenuRef = ref();
+const config = useRuntimeConfig();
+const baseUrl = config.public.apiBaseUrl;
 onMounted(async () => {
-  await handleGetProductsList()
-  await handleGetProductsClassList()
-})
+  await handleGetProductsList();
+  await handleGetProductsClassList();
+});
+// 点击类别查询产品
+const handleNodeClick = ({ id, labelEn }) => {
+  state.queryParams.classId = id;
+  state.activeClass = labelEn;
+  handleGetProductsList();
+};
 // 获取产品分类
 const handleGetProductsClassList = async () => {
   try {
-    state.loading = true
+    state.loading = true;
     // const res = await useFetch(`${baseUrl}/web-api/webOffice/product/productsClassTree`);
-    const res = await $fetch(`${baseUrl}/web-api/webOffice/product/productsClassTree`)
+    const res = await $fetch(`${baseUrl}/web-api/webOffice/product/productsClassTree`);
     if (res.code === 200) {
-      state.productsClassList = res.data
+      state.productsClassList = res.data;
     }
   } catch (err) {
   } finally {
-    state.loading = false
+    state.loading = false;
   }
-}
+};
 // 获取产品列表
 const handleGetProductsList = async () => {
   try {
-    state.loading = true
-    const queryStr = new URLSearchParams(state.queryParams).toString()
+    state.loading = true;
+    const queryStr = new URLSearchParams(state.queryParams).toString();
     // const res = await useFetch(`${baseUrl}/web-api/webOffice/product/list`);
-    const res = await $fetch(`${baseUrl}/web-api/webOffice/product/list?${queryStr}`)
+    const res = await $fetch(`${baseUrl}/web-api/webOffice/product/list?${queryStr}`);
     if (res.code === 200) {
-      state.productsList = res.rows
-      state.total = res.total
+      state.productsList = res.rows;
+      state.total = res.total;
     }
   } catch (err) {
   } finally {
-    state.loading = false
+    state.loading = false;
   }
-}
+};
 
 const handleSearchAll = () => {
   // state.queryParams.classId = "";
   // handleGetProductsList();
-}
+};
 // 点击类别查询产品
 const handleClassSearch = ({ id, labelEn }) => {
-  state.queryParams.classId = id
-  state.activeClass = labelEn
-  handleGetProductsList()
-}
+  state.queryParams.classId = id;
+  state.activeClass = labelEn;
+  handleGetProductsList();
+};
 const handleCurrentChange = (val: number) => {
-  handleGetProductsList()
-}
+  handleGetProductsList();
+};
 // 改变页面容量
 const handleSizeChange = (val: number) => {
-  state.queryParams.pageNum = 1
-  state.queryParams.pageSize = val
-  handleGetProductsList()
-}
+  state.queryParams.pageNum = 1;
+  state.queryParams.pageSize = val;
+  handleGetProductsList();
+};
 </script>
 <style lang="scss" scoped>
 .products-wrap {
