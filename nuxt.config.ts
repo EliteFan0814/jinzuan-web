@@ -24,11 +24,17 @@ export default defineNuxtConfig({
   nitro: {
     devProxy: {
       "/web-api": {
-        target: "http://localhost:8080/admin", // 这里是接口地址
+        // target: "http://localhost:8080/admin", // 这里是接口地址 
+        target: "https://www.jzdia.com/web-api", // 这里是接口地址
         changeOrigin: true,
         prependPath: true,
       },
     },
+  },
+  routeRules:{
+    '/web-api/**':{
+      proxy:'https://www.jzdia.com/web-api/**'
+    }
   },
   $development: {
     runtimeConfig: {

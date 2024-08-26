@@ -26,20 +26,6 @@
                   <p class="present">
                     {{ item.leader }}
                   </p>
-                  <!-- <ul class="feature">
-                    <li>
-                      <span class="point">●</span>
-                      <span class="f-item">金刚石复合片</span>
-                    </li>
-                    <li>
-                      <span class="point">●</span>
-                      <span class="f-item">金刚石复合片</span>
-                    </li>
-                    <li>
-                      <span class="point">●</span>
-                      <span class="f-item">金刚石复合片</span>
-                    </li>
-                  </ul> -->
                 </div>
               </div>
             </NuxtLink>
@@ -89,20 +75,27 @@ const state = reactive({
 });
 const config = useRuntimeConfig();
 const baseUrl = config.public.apiBaseUrl;
+
 onMounted(async () => {
-  await handleGetProductsClassList();
-  await handleGetNewsList();
+  // await handleGetProductsClassList();
+  // await handleGetNewsList();
 });
 // 获取产品分类
 const handleGetProductsClassList = async () => {
   try {
     state.loading = true;
-    // const res = await useFetch(`${baseUrl}/web-api/webOffice/product/productsClassTree`);
-    const res = await $fetch(`${baseUrl}/web-api/webOffice/product/productsClassTree`);
+    const { data, pending, error, refresh } = await useFetch(`${baseUrl}/web-api/webOffice/product/productsClassTree`);
+    const res: any = data.value;
+    console.log(res);
+    console.log(pending);
+    console.log(error);
+    console.log(refresh);
+    // const res = await $fetch(`${baseUrl}/web-api/webOffice/product/productsClassTree`);
     if (res.code === 200) {
       state.productsClassList = res.data[0].children;
     }
   } catch (err) {
+    console.log(err, 1);
   } finally {
     state.loading = false;
   }
@@ -111,9 +104,10 @@ const handleGetProductsClassList = async () => {
 const handleGetNewsList = async () => {
   try {
     state.loading = true;
-    // const { data, pending } = await useFetch(`${baseUrl}/web-api/webOffice/news/list?pageNum=1&pageSize=10`);
-    // const res: any = data.value;
-    const res: any = await $fetch(`${baseUrl}/web-api/webOffice/news/list?pageNum=1&pageSize=10`);
+    const { data, pending } = await useFetch(`${baseUrl}/web-api/webOffice/news/list?pageNum=1&pageSize=10`);
+    const res: any = data.value;
+    console.log(res);
+    // const res: any = await $fetch(`${baseUrl}/web-api/webOffice/news/list?pageNum=1&pageSize=10`);
     if (res.code === 200) {
       state.newsList = res.rows;
     }
@@ -122,6 +116,14 @@ const handleGetNewsList = async () => {
     state.loading = false;
   }
 };
+handleGetProductsClassList();
+// handleGetNewsList();
+
+// const { data, pending } = await useFetch(`${baseUrl}/web-api/webOffice/product/productsClassTree`);
+// const res: any = data.value;
+// if (res.code === 200) {
+//   state.productsClassList = res.data[0].children;
+// }
 </script>
 
 <style lang="scss" scoped>
