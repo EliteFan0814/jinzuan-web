@@ -125,7 +125,7 @@
           </div>
         </el-row>
       </div>
-      <el-empty v-else description="No Data" class="empty"/>
+      <el-empty v-else description="No Data" class="empty" />
     </div>
   </div>
 </template>
@@ -143,20 +143,23 @@ const state = reactive({
 });
 const config = useRuntimeConfig();
 const baseUrl = config.public.apiBaseUrl;
-onMounted(async () => {
-  await handleGetNewsList();
-});
+// onMounted(async () => {
+//   await handleGetNewsList();
+// });
 // 获取新闻详情
 const handleGetNewsList = async () => {
   try {
     state.loading = true;
     const queryStr = new URLSearchParams(state.queryParams).toString();
-    const res: any = await $fetch(`${baseUrl}/web-api/webOffice/news/list?${queryStr}`);
+    // const res: any = await $fetch(`${baseUrl}/web-api/webOffice/news/list?${queryStr}`);
+    const { data, pending, error, refresh } = await useFetch(`${baseUrl}/web-api/webOffice/news/list?${queryStr}`);
+    const res: any = data.value;
     if (res.code === 200) {
       state.newsList = res.rows;
       state.total = res.total;
     }
   } catch (err) {
+    console.log(err);
   } finally {
     state.loading = false;
   }
@@ -170,6 +173,7 @@ const handleSizeChange = (val: number) => {
   state.queryParams.pageSize = val;
   handleGetNewsList();
 };
+handleGetNewsList();
 </script>
 <style lang="scss" scoped>
 .newss-wrap {
@@ -305,7 +309,7 @@ const handleSizeChange = (val: number) => {
         display: none;
       }
     }
-    .empty{
+    .empty {
       width: 100%;
       text-align: center;
     }

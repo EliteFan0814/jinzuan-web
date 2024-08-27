@@ -126,8 +126,9 @@ const baseUrl = config.public.apiBaseUrl;
 //   });
 // });
 
-nextTick(async () => {
-  const { data, pending } = await useFetch(`${baseUrl}/web-api/webOffice/product/${state.productId}`);
+// 获取产品详情
+const handleGetProductDetail = async () => {
+  const { data, pending, error, refresh } = await useFetch(`${baseUrl}/web-api/webOffice/product/${state.productId}`);
   const res: any = data.value;
   if (res.code === 200) {
     state.content = res.data.content;
@@ -144,28 +145,28 @@ nextTick(async () => {
       ],
     });
   }
-});
+};
+handleGetProductDetail();
 
-// 获取产品详情
-// const handleGetProductsDetail = async () => {
-//   try {
-//     state.loading = true;
-//     const res: any = await $fetch(`${baseUrl}/web-api/webOffice/product/${state.productId}`);
-//     // const { data, pending } = await useFetch(`${baseUrl}/web-api/webOffice/product/${state.productId}`);
-//     // const res: any = data.value;
-//     if (res.code === 200) {
-//       state.content = res.data.content;
-//       state.remark = res.data.remark;
-//       state.productClassName = res.data.productClass.productClassName;
-//       state.productClassNameEn = res.data.productClass.productClassNameEn;
-//       state.productName = res.data.productName;
-//       state.productNameEn = res.data.productNameEn;
-//     }
-//   } catch (err) {
-//   } finally {
-//     state.loading = false;
+// nextTick(async () => {
+//   const { data, pending } = await useFetch(`${baseUrl}/web-api/webOffice/product/${state.productId}`);
+//   const res: any = data.value;
+//   if (res.code === 200) {
+//     state.content = res.data.content;
+//     state.remark = res.data.remark;
+//     state.productClassName = res.data.productClass.productClassName;
+//     state.productClassNameEn = res.data.productClass.productClassNameEn;
+//     state.productName = res.data.productName;
+//     state.productNameEn = res.data.productNameEn;
+//     useHead({
+//       title: state.productNameEn,
+//       meta: [
+//         { name: "description", content: state.productNameEn },
+//         { name: "keywords", content: state.remark },
+//       ],
+//     });
 //   }
-// };
+// });
 </script>
 <style lang="scss" scoped>
 .products-wrap {

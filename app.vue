@@ -12,7 +12,7 @@ useHead({
     {
       src: "/js/iconfont.js",
     },
-    { src: "https://dft.zoosnet.net/JS/LsJS.aspx?siteid=DFT69575945&float=1&lng=en" },
+    { src: "https://dft.zoosnet.net/JS/LsJS.aspx?siteid=DFT69575945&float=1&lng=en", tagPosition: "bodyClose" },
   ],
 });
 function flexible() {

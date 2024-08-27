@@ -132,6 +132,7 @@ const handleGetProductsList = async () => {
     console.log("我在哪了？")
     state.loading = true;
     const queryStr = new URLSearchParams(state.queryParams).toString();
+    // const res = await $fetch(`${baseUrl}/web-api/webOffice/product/list?${queryStr}`);
     const { data, pending, error, refresh } = await useFetch(`${baseUrl}/web-api/webOffice/product/list?${queryStr}`);
     const res: any = data.value;
     if (res.code === 200) {

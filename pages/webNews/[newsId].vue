@@ -110,7 +110,8 @@ const baseUrl = config.public.apiBaseUrl;
 //   await handleGetNewssDetail();
 // });
 
-nextTick(async () => {
+// 获取新闻详情
+const handleGetNewsDetail = async () => {
   const { data, pending } = await useFetch(`${baseUrl}/web-api/webOffice/news/${state.newsId}`);
   const res: any = data.value;
   if (res.code === 200) {
@@ -125,22 +126,24 @@ nextTick(async () => {
       ],
     });
   }
-});
-
-// 获取新闻详情
-// const handleGetNewssDetail = async () => {
-//   try {
-//     state.loading = true;
-//     const res: any = await $fetch(`${baseUrl}/web-api/webOffice/news/${state.newsId}`);
-//     if (res.code === 200) {
-//       state.content = res.data.content;
-//       state.newsName = res.data.newsName;
-//     }
-//   } catch (err) {
-//   } finally {
-//     state.loading = false;
+};
+handleGetNewsDetail();
+// nextTick(async () => {
+//   const { data, pending } = await useFetch(`${baseUrl}/web-api/webOffice/news/${state.newsId}`);
+//   const res: any = data.value;
+//   if (res.code === 200) {
+//     state.content = res.data.content;
+//     state.newsName = res.data.newsName;
+//     state.remark = res.data.remark;
+//     useHead({
+//       title: state.newsName,
+//       meta: [
+//         { name: "description", content: state.newsName },
+//         { name: "keywords", content: state.remark },
+//       ],
+//     });
 //   }
-// };
+// });
 </script>
 <style lang="scss" scoped>
 .newss-wrap {

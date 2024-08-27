@@ -76,10 +76,10 @@ const state = reactive({
 const config = useRuntimeConfig();
 const baseUrl = config.public.apiBaseUrl;
 
-onMounted(async () => {
-  // await handleGetProductsClassList();
-  // await handleGetNewsList();
-});
+// onMounted(async () => {
+//   await handleGetProductsClassList();
+//   await handleGetNewsList();
+// });
 // 获取产品分类
 const handleGetProductsClassList = async () => {
   try {
@@ -95,7 +95,7 @@ const handleGetProductsClassList = async () => {
       state.productsClassList = res.data[0].children;
     }
   } catch (err) {
-    console.log(err, 1);
+    console.log(err);
   } finally {
     state.loading = false;
   }
@@ -106,7 +106,6 @@ const handleGetNewsList = async () => {
     state.loading = true;
     const { data, pending } = await useFetch(`${baseUrl}/web-api/webOffice/news/list?pageNum=1&pageSize=10`);
     const res: any = data.value;
-    console.log(res);
     // const res: any = await $fetch(`${baseUrl}/web-api/webOffice/news/list?pageNum=1&pageSize=10`);
     if (res.code === 200) {
       state.newsList = res.rows;
@@ -117,13 +116,7 @@ const handleGetNewsList = async () => {
   }
 };
 handleGetProductsClassList();
-// handleGetNewsList();
-
-// const { data, pending } = await useFetch(`${baseUrl}/web-api/webOffice/product/productsClassTree`);
-// const res: any = data.value;
-// if (res.code === 200) {
-//   state.productsClassList = res.data[0].children;
-// }
+handleGetNewsList();
 </script>
 
 <style lang="scss" scoped>
