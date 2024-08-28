@@ -11,8 +11,9 @@
   },
   "devDependencies": {
     "@element-plus/nuxt": "^1.0.7",
+    "@nuxtjs/seo": "^2.0.0-rc.19",
     "element-plus": "^2.5.1",
-    "nuxt": "^3.10",
+    "nuxt": "^3.13.0",
     "sass": "^1.70.0",
     "vue": "^3.4.10",
     "vue-router": "^4.2.5"
