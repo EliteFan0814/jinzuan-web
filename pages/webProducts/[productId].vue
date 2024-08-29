@@ -115,58 +115,33 @@ const state = reactive({
 });
 const config = useRuntimeConfig();
 const baseUrl = config.public.apiBaseUrl;
-// onMounted(async () => {
-//   await handleGetProductsDetail();
-//   useHead({
-//     title: state.productNameEn,
-//     meta: [
-//       { name: "description", content: state.remark },
-//       { name: "keywords", content: state.remark },
-//     ],
-//   });
-// });
 
+const seoProductNameEn = ref();
+const seoRemark = ref();
+useHead({
+  title: seoProductNameEn,
+  meta: [
+    { name: "description", content: seoProductNameEn },
+    { name: "keywords", content: seoRemark },
+  ],
+});
 // 获取产品详情
 const handleGetProductDetail = async () => {
-  const { data, pending, error, refresh } = await useFetch(`${baseUrl}/web-api/webOffice/product/${state.productId}`);
+  const { data, error, refresh } = await useFetch(`${baseUrl}/web-api/webOffice/product/${state.productId}`);
   const res: any = data.value;
   if (res.code === 200) {
     state.content = res.data.content;
-    state.remark = res.data.remark;
     state.productClassName = res.data.productClass.productClassName;
     state.productClassNameEn = res.data.productClass.productClassNameEn;
     state.productName = res.data.productName;
     state.productNameEn = res.data.productNameEn;
-    useHead({
-      title: state.productNameEn,
-      meta: [
-        { name: "description", content: state.productNameEn },
-        { name: "keywords", content: state.remark },
-      ],
-    });
+    state.remark = res.data.remark;
+    // 用于页面seo
+    seoProductNameEn.value = res.data.productNameEn;
+    seoRemark.value = res.data.remark;
   }
 };
 handleGetProductDetail();
-
-// nextTick(async () => {
-//   const { data, pending } = await useFetch(`${baseUrl}/web-api/webOffice/product/${state.productId}`);
-//   const res: any = data.value;
-//   if (res.code === 200) {
-//     state.content = res.data.content;
-//     state.remark = res.data.remark;
-//     state.productClassName = res.data.productClass.productClassName;
-//     state.productClassNameEn = res.data.productClass.productClassNameEn;
-//     state.productName = res.data.productName;
-//     state.productNameEn = res.data.productNameEn;
-//     useHead({
-//       title: state.productNameEn,
-//       meta: [
-//         { name: "description", content: state.productNameEn },
-//         { name: "keywords", content: state.remark },
-//       ],
-//     });
-//   }
-// });
 </script>
 <style lang="scss" scoped>
 .products-wrap {

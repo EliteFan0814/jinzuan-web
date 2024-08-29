@@ -106,10 +106,16 @@ const state = reactive({
 });
 const config = useRuntimeConfig();
 const baseUrl = config.public.apiBaseUrl;
-// onMounted(async () => {
-//   await handleGetNewssDetail();
-// });
 
+const seoNewsName = ref();
+const seoRemark = ref();
+useHead({
+  title: state.newsName,
+  meta: [
+    { name: "description", content: seoNewsName },
+    { name: "keywords", content: seoRemark },
+  ],
+});
 // 获取新闻详情
 const handleGetNewsDetail = async () => {
   const { data, pending } = await useFetch(`${baseUrl}/web-api/webOffice/news/${state.newsId}`);
@@ -118,32 +124,12 @@ const handleGetNewsDetail = async () => {
     state.content = res.data.content;
     state.newsName = res.data.newsName;
     state.remark = res.data.remark;
-    useHead({
-      title: state.newsName,
-      meta: [
-        { name: "description", content: state.newsName },
-        { name: "keywords", content: state.remark },
-      ],
-    });
+    // 用于seo优化
+    seoNewsName.value = res.data.newsName;
+    seoRemark.value = res.data.remark;
   }
 };
 handleGetNewsDetail();
-// nextTick(async () => {
-//   const { data, pending } = await useFetch(`${baseUrl}/web-api/webOffice/news/${state.newsId}`);
-//   const res: any = data.value;
-//   if (res.code === 200) {
-//     state.content = res.data.content;
-//     state.newsName = res.data.newsName;
-//     state.remark = res.data.remark;
-//     useHead({
-//       title: state.newsName,
-//       meta: [
-//         { name: "description", content: state.newsName },
-//         { name: "keywords", content: state.remark },
-//       ],
-//     });
-//   }
-// });
 </script>
 <style lang="scss" scoped>
 .newss-wrap {

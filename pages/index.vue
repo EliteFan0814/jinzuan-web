@@ -86,10 +86,6 @@ const handleGetProductsClassList = async () => {
     state.loading = true;
     const { data, pending, error, refresh } = await useFetch(`${baseUrl}/web-api/webOffice/product/productsClassTree`);
     const res: any = data.value;
-    console.log(res);
-    console.log(pending);
-    console.log(error);
-    console.log(refresh);
     // const res = await $fetch(`${baseUrl}/web-api/webOffice/product/productsClassTree`);
     if (res.code === 200) {
       state.productsClassList = res.data[0].children;

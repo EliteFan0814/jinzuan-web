@@ -101,10 +101,7 @@ const state = reactive({
 const elMenuRef = ref();
 const config = useRuntimeConfig();
 const baseUrl = config.public.apiBaseUrl;
-// onMounted(async () => {
-//   await handleGetProductsList();
-//   await handleGetProductsClassList();
-// });
+
 // 点击类别查询产品
 const handleNodeClick = ({ id, labelEn }) => {
   state.queryParams.classId = id;
@@ -129,7 +126,6 @@ const handleGetProductsClassList = async () => {
 // 获取产品列表
 const handleGetProductsList = async () => {
   try {
-    console.log("我在哪了？")
     state.loading = true;
     const queryStr = new URLSearchParams(state.queryParams).toString();
     const { data, pending, error, refresh } = await useFetch(`${baseUrl}/web-api/webOffice/product/list?${queryStr}`);

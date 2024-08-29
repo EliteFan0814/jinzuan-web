@@ -2,9 +2,11 @@
 export default defineNuxtConfig({
   devtools: { enabled: true },
   modules: ["@element-plus/nuxt", "@nuxtjs/seo"],
+
   elementPlus: {
     /** Options */
   },
+
   css: [
     "normalize.css",
     "element-plus/theme-chalk/display.css",
@@ -12,6 +14,7 @@ export default defineNuxtConfig({
     // "/css/quill.snow.css",
     // "/css/quill.bubble.css",
   ],
+
   app: {
     head: {
       charset: "utf-8",
@@ -21,6 +24,7 @@ export default defineNuxtConfig({
       },
     },
   },
+
   nitro: {
     devProxy: {
       "/web-api": {
@@ -31,11 +35,13 @@ export default defineNuxtConfig({
       },
     },
   },
+
   routeRules: {
     "/web-api/**": {
       proxy: "https://www.jzdia.com/web-api/**",
     },
   },
+
   $development: {
     runtimeConfig: {
       public: {
@@ -43,6 +49,7 @@ export default defineNuxtConfig({
       },
     },
   },
+
   $production: {
     runtimeConfig: {
       public: {
@@ -50,4 +57,15 @@ export default defineNuxtConfig({
       },
     },
   },
+
+  site: {
+    url: "https://jzdia.com",
+    name: "JinZuan",
+    description:
+      "JinZuan is a diversified global abrasives manufacturing company that brings products and technologies together.",
+    defaultLocale: "en", // not needed if you have @nuxtjs/i18n installed，
+    indexable: true,
+  },
+
+  compatibilityDate: "2024-08-29",
 });
