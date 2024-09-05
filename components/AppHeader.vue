@@ -59,7 +59,13 @@ const state = reactive({
     { label: "home", hasChild: false, route: "/", activeList: ["index"] },
     { label: "about", hasChild: false, route: "/about", activeList: ["about"] },
     // { label: "solutions", hasChild: true, route: "/solutions",activeList: ["solutions"] },
-    { label: "products", hasChild: false, route: "/products", activeList: ["products", "webProducts-productId"] },
+    // { label: "products", hasChild: false, route: "/products", activeList: ["products", "webProducts-productId"] },
+    {
+      label: "products",
+      hasChild: false,
+      route: "/product-list-Products_100",
+      activeList: ["products", "product-list-pcName_pcId", "webProducts-productId"],
+    },
     { label: "news", hasChild: false, route: "/news", activeList: ["news", "news-newsId"] },
     // { label: "downloads", hasChild: false, route: "/downloads",activeList: ["downloads"] },
     // { label: "contacts", hasChild: false, route: "/contacts",activeList: ["contacts"] },
@@ -70,8 +76,15 @@ useHead({
   title:
     "JinZuan is a diversified global abrasives manufacturing company that brings products and technologies together.",
   meta: [
-    { name: "description", content: "Diamond cutting blades factory supply from China with premium quality since 2008." },
-    { name: "keywords", content: "diamond blade factroy, tile diamond blade, grind wheel diamond,diamond cup wheel,diamond cutting disc, resin diamond blade" },
+    {
+      name: "description",
+      content: "Diamond cutting blades factory supply from China with premium quality since 2008.",
+    },
+    {
+      name: "keywords",
+      content:
+        "diamond blade factroy, tile diamond blade, grind wheel diamond,diamond cup wheel,diamond cutting disc, resin diamond blade",
+    },
   ],
 });
 </script>
