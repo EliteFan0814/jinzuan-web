@@ -13,11 +13,11 @@
           <div class="products-class">
             <h4 class="p-c-name">
               <img src="/logo.png" alt="jzdia" class="logo-title" />
-              <NuxtLink to="/products">
+              <NuxtLink to="/product-list-Products/100">
                 <span class="omit-1" :title="item.labelEn">{{ item.labelEn }}</span>
               </NuxtLink>
             </h4>
-            <NuxtLink to="/products">
+            <NuxtLink to="/product-list-Products/100">
               <div class="p-c-content">
                 <div class="img-wrap">
                   <img :src="item.avatar" alt="" />

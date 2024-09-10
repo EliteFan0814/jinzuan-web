@@ -14,7 +14,7 @@
           :data="state.productsClassList"
           :props="state.defaultProps">
           <template #default="{ node, data }">
-            <NuxtLink :to="`/product-list-${data.labelEn.replace(/\s/g, '-')}_${data.id}`">{{ node.label }}</NuxtLink>
+            <NuxtLink :to="`/product-list-${data.labelEn.replace(/\s/g, '-')}/${data.id}`">{{ node.label }}</NuxtLink>
           </template>
         </el-tree>
       </div>
@@ -22,7 +22,7 @@
         <div class="bread-wrap">
           <el-breadcrumb separator="/">
             <el-breadcrumb-item :to="{ path: '/' }">Home</el-breadcrumb-item>
-            <el-breadcrumb-item><NuxtLink to="/products">Products List</NuxtLink></el-breadcrumb-item>
+            <el-breadcrumb-item><NuxtLink to="/product-list-Products/100">Products List</NuxtLink></el-breadcrumb-item>
             <el-breadcrumb-item>{{ state.activeClass }}</el-breadcrumb-item>
           </el-breadcrumb>
         </div>
@@ -34,7 +34,7 @@
                   <img :src="item.avatar" :alt="item.productNameEn" class="p-img" />
                 </div>
                 <div class="p-name omit-1">
-                  <NuxtLink :to="`/webProducts/${item.productId}`">{{ item.productNameEn }}</NuxtLink>
+                  <NuxtLink :to="`/product-detail/${item.productId}`">{{ item.productNameEn }}</NuxtLink>
                 </div>
                 <div class="item"></div>
               </div>
@@ -50,7 +50,9 @@
                 background
                 @size-change="handleSizeChange"
                 @current-change="handleCurrentChange"
-                layout="total, sizes, prev, pager, next, jumper" />
+                layout="total, sizes, prev,pager,next, jumper">
+                <div slot="pager">2222</div>
+              </el-pagination>
             </div>
             <div class="pagination p-xs">
               <el-pagination
@@ -59,7 +61,7 @@
                 layout="prev, pager, next"
                 @size-change="handleSizeChange"
                 @current-change="handleCurrentChange"
-                :total="state.total" />
+                :total="state.total"></el-pagination>
             </div>
           </el-row>
         </div>

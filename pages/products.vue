@@ -33,7 +33,7 @@
         <div class="bread-wrap">
           <el-breadcrumb separator="/">
             <el-breadcrumb-item :to="{ path: '/' }">Home</el-breadcrumb-item>
-            <el-breadcrumb-item><NuxtLink to="/products">Products List</NuxtLink></el-breadcrumb-item>
+            <el-breadcrumb-item><NuxtLink to="/product-list-Products/100">Products List</NuxtLink></el-breadcrumb-item>
             <el-breadcrumb-item>{{ state.activeClass }}</el-breadcrumb-item>
           </el-breadcrumb>
         </div>
