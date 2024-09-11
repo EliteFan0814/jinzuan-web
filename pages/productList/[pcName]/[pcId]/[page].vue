@@ -7,33 +7,27 @@
     </div>
     <div class="products-content" v-loading="state.loading">
       <div class="left hidden-md-and-down">
-        <!-- <el-menu :default-openeds="['0']" ref="elMenuRef">
-          <el-sub-menu v-for="(item, index) in state.productsClassList" :key="item.id" :index="String(index)">
-            <template #title>
-              <span @click.stop="handleSearchAll">{{ item.labelEn }}</span>
-            </template>
-            <el-menu-item
-              v-for="(innerItem, innerIndex) in item.children"
-              :key="innerItem.id"
-              :index="String(index) + '-' + String(innerIndex)"
-              @click="handleClassSearch(innerItem)">
-              {{ innerItem.labelEn }}
-            </el-menu-item>
-          </el-sub-menu>
-        </el-menu> -->
         <el-tree
           style="max-width: 600px"
           node-key="id"
           :default-expanded-keys="[100]"
+          :default-checked-keys="[expandedProductClassId]"
           :data="state.productsClassList"
-          :props="state.defaultProps"
-          @node-click="handleNodeClick" />
+          :props="state.defaultProps">
+          <template #default="{ node, data }">
+            <div :class="{ 'tab-highlignt': data.id == expandedProductClassId }">
+              <NuxtLink :to="`/productList/${data.labelEn.replace(/\s/g, '-')}/${data.id}/1`">
+                {{ node.label }}
+              </NuxtLink>
+            </div>
+          </template>
+        </el-tree>
       </div>
       <div class="right">
         <div class="bread-wrap">
           <el-breadcrumb separator="/">
             <el-breadcrumb-item :to="{ path: '/' }">Home</el-breadcrumb-item>
-            <el-breadcrumb-item><NuxtLink to="/product-list-Products/100">Products List</NuxtLink></el-breadcrumb-item>
+            <el-breadcrumb-item><NuxtLink to="/productList/Products/100/1">Products List</NuxtLink></el-breadcrumb-item>
             <el-breadcrumb-item>{{ state.activeClass }}</el-breadcrumb-item>
           </el-breadcrumb>
         </div>
@@ -45,7 +39,12 @@
                   <img :src="item.avatar" :alt="item.productNameEn" class="p-img" />
                 </div>
                 <div class="p-name omit-1">
-                  <NuxtLink :to="`/webProducts/${item.productId}`">{{ item.productNameEn }}</NuxtLink>
+                  <!-- <NuxtLink :to="`/product-detail/${item.productId}`" :title="item.productNameEn">{{ item.productNameEn }}</NuxtLink> -->
+                  <NuxtLink
+                    :to="`/productList/${route.params.pcName}/${route.params.pcId}/detail/${item.productId}`"
+                    :title="item.productNameEn">
+                    {{ item.productNameEn }}
+                  </NuxtLink>
                 </div>
                 <div class="item"></div>
               </div>
@@ -61,7 +60,9 @@
                 background
                 @size-change="handleSizeChange"
                 @current-change="handleCurrentChange"
-                layout="total, sizes, prev, pager, next, jumper" />
+                layout="total, sizes, prev,pager,next, jumper">
+                <div slot="pager">2222</div>
+              </el-pagination>
             </div>
             <div class="pagination p-xs">
               <el-pagination
@@ -70,8 +71,9 @@
                 layout="prev, pager, next"
                 @size-change="handleSizeChange"
                 @current-change="handleCurrentChange"
-                :total="state.total" />
+                :total="state.total"></el-pagination>
             </div>
+            <pagination :total="107" :pageSize="10" :currentPage="1"></pagination>
           </el-row>
         </div>
         <el-empty v-else description="No Data" />
@@ -81,7 +83,8 @@
 </template>
 <script lang="ts" setup>
 import productsImg from "~/assets/products.jpg";
-
+const route = useRoute();
+const expandedProductClassId = ref([Number(route.params.pcId)]);
 const state = reactive({
   loading: false,
   activeClass: "",
@@ -93,21 +96,22 @@ const state = reactive({
     label: "labelEn",
   },
   queryParams: {
-    pageNum: 1,
+    pageNum: Number(route.params.page),
     pageSize: 10,
     classId: "",
   },
 });
+
 const elMenuRef = ref();
 const config = useRuntimeConfig();
 const baseUrl = config.public.apiBaseUrl;
 
 // 点击类别查询产品
-const handleNodeClick = ({ id, labelEn }) => {
-  state.queryParams.classId = id;
-  state.activeClass = labelEn;
-  handleGetProductsList();
-};
+// const handleNodeClick = ({ id, labelEn }) => {
+//   state.queryParams.classId = id;
+//   state.activeClass = labelEn;
+//   handleGetProductsList();
+// };
 // 获取产品分类
 const handleGetProductsClassList = async () => {
   try {
@@ -139,17 +143,12 @@ const handleGetProductsList = async () => {
     state.loading = false;
   }
 };
-
-const handleSearchAll = () => {
-  // state.queryParams.classId = "";
-  // handleGetProductsList();
-};
 // 点击类别查询产品
-const handleClassSearch = ({ id, labelEn }) => {
-  state.queryParams.classId = id;
-  state.activeClass = labelEn;
-  handleGetProductsList();
-};
+// const handleClassSearch = ({ id, labelEn }) => {
+//   state.queryParams.classId = id;
+//   state.activeClass = labelEn;
+//   handleGetProductsList();
+// };
 const handleCurrentChange = (val: number) => {
   handleGetProductsList();
 };
@@ -159,8 +158,11 @@ const handleSizeChange = (val: number) => {
   state.queryParams.pageSize = val;
   handleGetProductsList();
 };
-handleGetProductsList();
 handleGetProductsClassList();
+
+state.queryParams.classId = route.params.pcId;
+state.activeClass = route.params.pcName.replace(/-/g, " ");
+handleGetProductsList();
 </script>
 <style lang="scss" scoped>
 .products-wrap {
@@ -187,6 +189,9 @@ handleGetProductsClassList();
       flex-shrink: 0;
       width: 20%;
       .el-collapse {
+      }
+      .tab-highlignt {
+        font-weight: bold;
       }
     }
     .right {

@@ -2,11 +2,9 @@
 export default defineNuxtConfig({
   devtools: { enabled: true },
   modules: ["@element-plus/nuxt", "@nuxtjs/seo"],
-
   elementPlus: {
     /** Options */
   },
-
   css: [
     "normalize.css",
     "element-plus/theme-chalk/display.css",

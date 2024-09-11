@@ -59,13 +59,11 @@
 </template>
 <script lang="ts" setup>
 const state = reactive({
-  metaTitle: "金钻",
-  metaContent: "金钻",
   navigationList: [
     { label: "home", hasChild: false, route: "/" },
     { label: "about", hasChild: false, route: "/about" },
     // { label: "solutions", hasChild: true, route: "/solutions" },
-    { label: "products", hasChild: true, route: "/product-list-Products/100" },
+    { label: "products", hasChild: true, route: "/productList/Products/100/1" },
     { label: "news", hasChild: false, route: "/news" },
     // { label: "downloads", hasChild: false, route: "/downloads" },
     // { label: "contacts", hasChild: false, route: "/contacts" },

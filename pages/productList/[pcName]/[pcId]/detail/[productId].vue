@@ -82,8 +82,12 @@
         <div class="bread-wrap">
           <el-breadcrumb separator="/">
             <el-breadcrumb-item :to="{ path: '/' }">Home</el-breadcrumb-item>
-            <el-breadcrumb-item><NuxtLink to="/product-list-Products/100">Products List</NuxtLink></el-breadcrumb-item>
-            <el-breadcrumb-item>{{ state.productClassNameEn }}</el-breadcrumb-item>
+            <el-breadcrumb-item><NuxtLink to="/productList/Products/100/1">Products List</NuxtLink></el-breadcrumb-item>
+            <el-breadcrumb-item>
+              <NuxtLink :to="`/productList/${route.params.pcName}/${route.params.pcId}/1`">
+                {{ state.productClassNameEn }}
+              </NuxtLink>
+            </el-breadcrumb-item>
             <el-breadcrumb-item>{{ state.productNameEn }}</el-breadcrumb-item>
           </el-breadcrumb>
         </div>
