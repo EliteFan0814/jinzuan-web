@@ -33,10 +33,10 @@ const state = reactive({
   swiperModules: [Pagination, Autoplay, Navigation]
 })
 const onSwiper = (swiper) => {
-  console.log(swiper)
+  // console.log(swiper)
 }
 const onSlideChange = () => {
-  console.log('slide change')
+  // console.log('slide change')
 }
 </script>
 

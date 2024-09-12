@@ -66,7 +66,7 @@ const state = reactive({
       route: "/productList/Products/100/1",
       activeList: ["products", "productList-pcName-pcId-page", "product-detail-productId"],
     },
-    { label: "news", hasChild: false, route: "/news", activeList: ["news", "news-newsId"] },
+    { label: "news", hasChild: false, route: "/newsList/1", activeList: ["newsList-page", "newsList-detail-newsId"] },
     // { label: "downloads", hasChild: false, route: "/downloads",activeList: ["downloads"] },
     // { label: "contacts", hasChild: false, route: "/contacts",activeList: ["contacts"] },
   ],

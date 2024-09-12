@@ -4,7 +4,7 @@
     <link rel="stylesheet" href="/css/quill.snow.css" />
     <link rel="stylesheet" href="/css/quill.bubble.css" />
     <div class="head">
-      <!-- <img src="https://dummyimage.com/1200x200/ccc/fff" alt="" /> -->
+      <!-- <img src="https://dummyimage.com/1200x200/ccc/fff" alt="" />-->
       <img :src="newsImg" alt="" />
       <span class="head-title">News</span>
     </div>
@@ -73,59 +73,26 @@
         </div>
       </el-affix>
       <!-- <div class="left-div"></div> -->
-      <div v-if="state.newsList.length > 0" class="right">
+      <div class="right">
         <div class="bread-wrap">
           <el-breadcrumb separator="/">
             <el-breadcrumb-item :to="{ path: '/' }">Home</el-breadcrumb-item>
-            <el-breadcrumb-item><NuxtLink to="/news">News List</NuxtLink></el-breadcrumb-item>
+            <el-breadcrumb-item><NuxtLink to="/newsList/1">News List</NuxtLink></el-breadcrumb-item>
+            <el-breadcrumb-item>
+              <h1 class="h-title">{{ state.newsName }}</h1>
+            </el-breadcrumb-item>
           </el-breadcrumb>
         </div>
         <div class="news-content">
-          <div class="news-item" v-for="(item, index) in state.newsList" :key="index">
-            <el-row>
-              <el-col :md="5">
-                <div class="img-wrap">
-                  <img :src="item.avatar" :alt="item.newsName" class="p-img" />
-                </div>
-              </el-col>
-              <el-col :md="19">
-                <div class="title-wrap">
-                  <div class="title">{{ item.newsName }}</div>
-                  <div class="time">{{ item.createTime }}</div>
-                </div>
-                <div class="more">
-                  <button class="common-btn">
-                    <NuxtLink :to="`/webNews/${item.newsId}`">More</NuxtLink>
-                  </button>
-                </div>
-              </el-col>
-            </el-row>
-          </div>
+          <el-row>
+            <el-col>
+              <div class="ql-container ql-snow">
+                <div class="ql-editor" v-html="state.content"></div>
+              </div>
+            </el-col>
+          </el-row>
         </div>
-        <el-row>
-          <div class="pagination p-md">
-            <el-pagination
-              v-model:currentPage="state.queryParams.pageNum"
-              v-model:page-size="state.queryParams.pageSize"
-              :total="state.total"
-              :page-sizes="[10, 20, 50, 100]"
-              background
-              @size-change="handleSizeChange"
-              @current-change="handleCurrentChange"
-              layout="total, sizes, prev, pager, next, jumper" />
-          </div>
-          <div class="pagination p-xs">
-            <el-pagination
-              v-model:currentPage="state.queryParams.pageNum"
-              v-model:page-size="state.queryParams.pageSize"
-              layout="prev, pager, next"
-              @size-change="handleSizeChange"
-              @current-change="handleCurrentChange"
-              :total="state.total" />
-          </div>
-        </el-row>
       </div>
-      <el-empty v-else description="No Data" class="empty" />
     </div>
   </div>
 </template>
@@ -134,46 +101,37 @@ import newsImg from "~/assets/news.jpg";
 const route = useRoute();
 const state = reactive({
   loading: false,
-  newsList: [],
-  total: 0,
-  queryParams: {
-    pageNum: 1,
-    pageSize: 10,
-  },
+  newsId: route.params.newsId,
+  newsName: "",
+  content: "",
+  remark: "",
 });
 const config = useRuntimeConfig();
 const baseUrl = config.public.apiBaseUrl;
-// onMounted(async () => {
-//   await handleGetNewsList();
-// });
+
+const seoNewsName = ref();
+const seoRemark = ref();
+useHead({
+  title: state.newsName,
+  meta: [
+    { name: "description", content: seoNewsName },
+    { name: "keywords", content: seoRemark },
+  ],
+});
 // 获取新闻详情
-const handleGetNewsList = async () => {
-  try {
-    state.loading = true;
-    const queryStr = new URLSearchParams(state.queryParams).toString();
-    // const res: any = await $fetch(`${baseUrl}/web-api/webOffice/news/list?${queryStr}`);
-    const { data, pending, error, refresh } = await useFetch(`${baseUrl}/web-api/webOffice/news/list?${queryStr}`);
-    const res: any = data.value;
-    if (res.code === 200) {
-      state.newsList = res.rows;
-      state.total = res.total;
-    }
-  } catch (err) {
-    console.log(err);
-  } finally {
-    state.loading = false;
+const handleGetNewsDetail = async () => {
+  const { data, pending } = await useFetch(`${baseUrl}/web-api/webOffice/news/${state.newsId}`);
+  const res: any = data.value;
+  if (res.code === 200) {
+    state.content = res.data.content;
+    state.newsName = res.data.newsName;
+    state.remark = res.data.remark;
+    // 用于seo优化
+    seoNewsName.value = res.data.newsName;
+    seoRemark.value = res.data.remark;
   }
 };
-const handleCurrentChange = (val: number) => {
-  handleGetNewsList();
-};
-// 改变页面容量
-const handleSizeChange = (val: number) => {
-  state.queryParams.pageNum = 1;
-  state.queryParams.pageSize = val;
-  handleGetNewsList();
-};
-handleGetNewsList();
+handleGetNewsDetail();
 </script>
 <style lang="scss" scoped>
 .newss-wrap {
@@ -245,86 +203,30 @@ handleGetNewsList();
       padding: 0.1rem;
       .bread-wrap {
         margin-bottom: 0.1rem;
+        .h-title {
+          display: inline;
+          font-size: 14px;
+          font-weight: normal;
+        }
       }
       .news-content {
-        .news-item {
-          border-bottom: 1px solid #ebebeb;
-          padding: 0.06rem 0;
-          margin-bottom: 0.05rem;
-          // background-color: #ebebeb;
-          .img-wrap {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 100%;
-            margin: 0 auto;
-            height: 150px;
-            // margin-bottom: 0.05rem;
-            // border: 1px solid red;
-            .p-img {
-              display: block;
+        .ql-container {
+          border: 1px solid #dcdfe6;
+          .ql-editor {
+            border: none;
+            :deep(.ql-video) {
+              width: 100%;
               max-width: 100%;
-              max-height: 100%;
-            }
-          }
-          .title-wrap {
-            padding: 0.05rem;
-            font-size: 0.1rem;
-            .title {
-              font-weight: bold;
-            }
-            .time {
-              padding: 0.08rem 0 0.02rem;
-              font-size: 12px;
-              color: #9b9b9b;
-            }
-          }
-          .more {
-            padding: 0.05rem;
-            .common-btn {
-              color: #151515;
-              background-color: #ccc;
-              border: none;
-              padding: 0.05rem 0.1rem;
-              cursor: pointer;
-              transition: all 0.2s;
-              &:hover {
-                background-color: #f5a63f;
-                color: #fff;
-              }
+              height: 2.5rem;
             }
           }
         }
       }
-      .pagination {
-        width: 100%;
-        padding: 0.05rem 0;
-        display: flex;
-        justify-content: center;
-      }
-      .p-md {
-        display: flex;
-      }
-      .p-xs {
-        display: none;
-      }
-    }
-    .empty {
-      width: 100%;
-      text-align: center;
     }
   }
   @media only screen and (max-width: 992px) {
     .newss-content {
       margin: 0;
-      .right {
-        .p-md {
-          display: none;
-        }
-        .p-xs {
-          display: flex;
-        }
-      }
     }
   }
 }

@@ -52,13 +52,13 @@
             </el-col>
             <el-col :md="18">
               <div class="news-title omit-1">
-                <NuxtLink :to="`/webNews/${item.newsId}`">{{ item.newsName }}</NuxtLink>
+                <NuxtLink :to="`/newsList/detail/${item.newsId}`">{{ item.newsName }}</NuxtLink>
               </div>
             </el-col>
           </el-row>
         </div>
         <div class="more">
-          <button class="common-btn"><NuxtLink :to="`/news/`">More</NuxtLink></button>
+          <button class="common-btn"><NuxtLink :to="`/newsList/1`">More</NuxtLink></button>
         </div>
       </div>
       <el-empty v-else description="No Data" />

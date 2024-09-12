@@ -64,7 +64,7 @@ const state = reactive({
     { label: "about", hasChild: false, route: "/about" },
     // { label: "solutions", hasChild: true, route: "/solutions" },
     { label: "products", hasChild: true, route: "/productList/Products/100/1" },
-    { label: "news", hasChild: false, route: "/news" },
+    { label: "news", hasChild: false, route: "/newsList/1" },
     // { label: "downloads", hasChild: false, route: "/downloads" },
     // { label: "contacts", hasChild: false, route: "/contacts" },
   ],

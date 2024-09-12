@@ -10,13 +10,15 @@
         <el-tree
           style="max-width: 600px"
           node-key="id"
-          :default-expanded-keys="[100]"
+          :default-expanded-keys="[Number(route.params.pcId)]"
           :default-checked-keys="[expandedProductClassId]"
           :data="state.productsClassList"
           :props="state.defaultProps">
           <template #default="{ node, data }">
-            <div :class="{ 'tab-highlignt': data.id == expandedProductClassId }">
-              <NuxtLink :to="`/productList/${data.labelEn.replace(/\s/g, '-')}/${data.id}/1`">
+            <div
+              :class="{ 'omit-1': true, 'list-item-wrap': true, 'tab-highlignt': data.id == expandedProductClassId }"
+              :title="node.label">
+              <NuxtLink :to="`/productList/${data.labelEn.replace(/\s/g, '-')}/${data.id}/1`" class="pc-a">
                 {{ node.label }}
               </NuxtLink>
             </div>
@@ -39,9 +41,15 @@
                   <img :src="item.avatar" :alt="item.productNameEn" class="p-img" />
                 </div>
                 <div class="p-name omit-1">
-                  <!-- <NuxtLink :to="`/product-detail/${item.productId}`" :title="item.productNameEn">{{ item.productNameEn }}</NuxtLink> -->
-                  <NuxtLink
+                  <!-- <NuxtLink
                     :to="`/productList/${route.params.pcName}/${route.params.pcId}/detail/${item.productId}`"
+                    :title="item.productNameEn">
+                    {{ item.productNameEn }}
+                  </NuxtLink> -->
+                  <NuxtLink
+                    :to="`/productList/${item.productClass.productClassNameEn.replace(/\s/g, '-')}/${
+                      item.classId
+                    }/detail/${item.productId}`"
                     :title="item.productNameEn">
                     {{ item.productNameEn }}
                   </NuxtLink>
@@ -51,7 +59,7 @@
             </el-col>
           </el-row>
           <el-row>
-            <div class="pagination p-md">
+            <!-- <div class="pagination p-md">
               <el-pagination
                 v-model:currentPage="state.queryParams.pageNum"
                 v-model:page-size="state.queryParams.pageSize"
@@ -72,8 +80,11 @@
                 @size-change="handleSizeChange"
                 @current-change="handleCurrentChange"
                 :total="state.total"></el-pagination>
-            </div>
-            <pagination :total="107" :pageSize="10" :currentPage="1"></pagination>
+            </div> -->
+            <paginationProduct
+              :total="state.total"
+              :pageSize="10"
+              :currentPage="Number(route.params.page)"></paginationProduct>
           </el-row>
         </div>
         <el-empty v-else description="No Data" />

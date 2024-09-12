@@ -1,5 +1,5 @@
 #1、基于镜像node版本
-FROM node:20.1.0
+FROM node:20.17.0
 #2、作者
 MAINTAINER fanpeichao
 #3、参数，node的环境为生产环境

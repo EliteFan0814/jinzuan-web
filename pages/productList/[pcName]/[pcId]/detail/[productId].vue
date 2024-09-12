@@ -88,7 +88,9 @@
                 {{ state.productClassNameEn }}
               </NuxtLink>
             </el-breadcrumb-item>
-            <el-breadcrumb-item>{{ state.productNameEn }}</el-breadcrumb-item>
+            <el-breadcrumb-item>
+              <h1 class="h-title">{{ state.productNameEn }}</h1>
+            </el-breadcrumb-item>
           </el-breadcrumb>
         </div>
         <div class="product-content">
@@ -217,6 +219,11 @@ handleGetProductDetail();
       padding: 0.1rem;
       .bread-wrap {
         margin-bottom: 0.1rem;
+        .h-title {
+          display: inline;
+          font-size: 14px;
+          font-weight: normal;
+        }
       }
       .product-content {
         .ql-container {

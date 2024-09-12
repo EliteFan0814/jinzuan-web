@@ -1,22 +1,21 @@
 <template>
   <div class="page-wrap">
-    {{ pre }}---{{ pageListArr }}---{{ next }}
     <ul class="page-list">
       <li v-if="pre > 0" class="page-item">
         <a href=""></a>
-        <NuxtLink :to="`/productList/${route.params.pcName}/${route.params.pcId}/${pageListArr[0]}`">
-          <!-- {{ pageListArr[0] }} -->
-          <el-icon><ArrowLeftBold /></el-icon>
+        <NuxtLink :to="`/productList/${route.params.pcName}/${route.params.pcId}/${pre}`">
+          <el-icon class="pre-next"><ArrowLeftBold /></el-icon>
         </NuxtLink>
       </li>
-      <li v-for="(item, index) in pageListArr" :key="item" class="page-item">
+      <li
+        v-for="(item, index) in pageListArr"
+        :key="item"
+        :class="{ 'page-item': true, 'active-item': item == route.params.page }">
         <NuxtLink :to="`/productList/${route.params.pcName}/${route.params.pcId}/${item}`">{{ item }}</NuxtLink>
       </li>
       <li v-if="next > 0" class="page-item">
-        <NuxtLink
-          :to="`/productList/${route.params.pcName}/${route.params.pcId}/${pageListArr[pageListArr.length - 1]}`">
-          {{ next }}
-          <el-icon><ArrowLeftBold /></el-icon>
+        <NuxtLink :to="`/productList/${route.params.pcName}/${route.params.pcId}/${next}`">
+          <el-icon class="pre-next"><ArrowRightBold /></el-icon>
         </NuxtLink>
       </li>
     </ul>
@@ -24,12 +23,6 @@
 </template>
 
 <script lang="ts" setup>
-import * as ElementPlusIconsVue from '@element-plus/icons-vue'
-// You might choose this based on an API call or logged-in status
-const nuxtApp = useNuxtApp()
-for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
-  nuxtApp.vueApp.component(key, component)
-}
 const route = useRoute();
 const props = defineProps({
   total: Number,
@@ -57,7 +50,6 @@ const pageGenerate = (total: number, pageSize: number, currentPage: number) => {
   for (min; min <= max; min++) {
     pageListArr.value.push(min);
   }
-  console.log(pageListArr);
   if (currentPage - 1 > 0) {
     pre.value = currentPage - 1;
   } else {
@@ -78,14 +70,24 @@ pageGenerate(props.total, props.pageSize, props.currentPage);
   .page-list {
     display: flex;
     justify-content: center;
+    align-items: center;
     .page-item {
-      border: 1px solid red;
+      font-size: 14px;
       width: 20px;
       margin: 0 5px;
+      padding: 5px;
       a {
         display: block;
         text-align: center;
       }
+      .pre-next {
+        padding-top: 2px;
+        font-size: 14px;
+      }
+    }
+    .active-item {
+      background: #409eff;
+      color: #fff;
     }
   }
 }
